@@ -88,7 +88,7 @@ const fixBufferError = () => {
 };
 
 const fixWalletSdkError = () => {
-  const file = './node_modules/@unisat/wallet-sdk/lib/bitcoin-core.js';
+  const file = './node_modules/@notemarket/wallet-sdk/lib/bitcoin-core.js';
   let fileData = fs.readFileSync(file).toString();
   fileData = `"use strict";
   Object.defineProperty(exports, "__esModule", { value: true });

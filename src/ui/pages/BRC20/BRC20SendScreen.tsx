@@ -22,7 +22,7 @@ import {
 import { colors } from '@/ui/theme/colors';
 import { fontSizes } from '@/ui/theme/font';
 import { useWallet } from '@/ui/utils';
-import { getAddressUtxoDust } from '@unisat/wallet-sdk/lib/transaction';
+import { getAddressUtxoDust } from '@notemarket/wallet-sdk/lib/transaction';
 
 import { SignPsbt } from '../Approval/components';
 import { useNavigate } from '../MainRoute';

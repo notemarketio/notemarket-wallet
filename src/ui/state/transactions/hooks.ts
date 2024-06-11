@@ -4,8 +4,8 @@ import { KEYRING_TYPE } from '@/shared/constant';
 import { RawTxInfo, ToAddressInfo } from '@/shared/types';
 import { useTools } from '@/ui/components/ActionComponent';
 import { satoshisToAmount, satoshisToBTC, sleep, useWallet } from '@/ui/utils';
-import { UnspentOutput } from '@unisat/wallet-sdk';
-import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
+import { UnspentOutput } from '@notemarket/wallet-sdk';
+import { bitcoin } from '@notemarket/wallet-sdk/lib/bitcoin-core';
 
 import { AppState } from '..';
 import { useAccountAddress, useCurrentAccount } from '../accounts/hooks';

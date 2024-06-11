@@ -30,8 +30,8 @@ import {
   WalletConfig,
   WalletKeyring
 } from '@/shared/types';
-import { AddressType, UnspentOutput } from '@unisat/wallet-sdk';
-import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
+import { AddressType, UnspentOutput } from '@notemarket/wallet-sdk';
+import { bitcoin } from '@notemarket/wallet-sdk/lib/bitcoin-core';
 
 export interface WalletController {
   openapi: {
