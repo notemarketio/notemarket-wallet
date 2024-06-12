@@ -1,6 +1,7 @@
 import VirtualList from 'rc-virtual-list';
 import { forwardRef, useMemo, useState } from 'react';
 
+import { KEYRING_TYPE } from '@/shared/constant';
 import { Account } from '@/shared/types';
 import { Card, Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
@@ -19,7 +20,6 @@ import {
   PlusCircleOutlined
 } from '@ant-design/icons';
 
-import { KEYRING_TYPE } from '@/shared/constant';
 import { useNavigate } from '../MainRoute';
 
 export interface ItemData {
@@ -61,7 +61,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
           onClick={async (e) => {
             if (currentAccount.pubkey !== account.pubkey) {
               await wallet.changeKeyring(keyring, account.index);
-              const _currentAccount = await wallet.getCurrentAccount();
+              const _currentAccount = await wallet.getCurrentNoteAccount();
               dispatch(accountActions.setCurrent(_currentAccount));
             }
             if (autoNav) navigate('MainScreen');
@@ -122,13 +122,15 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
               <CopyOutlined />
               <Text text="Copy address" size="sm" />
             </Row>
-            {account.type !== KEYRING_TYPE.KeystoneKeyring && <Row
-              onClick={() => {
-                navigate('ExportPrivateKeyScreen', { account });
-              }}>
-              <KeyOutlined />
-              <Text text="Export Private Key" size="sm" />
-            </Row>}
+            {account.type !== KEYRING_TYPE.KeystoneKeyring && (
+              <Row
+                onClick={() => {
+                  navigate('ExportPrivateKeyScreen', { account });
+                }}>
+                <KeyOutlined />
+                <Text text="Export Private Key" size="sm" />
+              </Row>
+            )}
           </Column>
         )}
       </Column>

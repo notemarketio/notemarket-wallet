@@ -1,20 +1,19 @@
 import { useCallback } from 'react';
 
-import { Account, AddressType } from '@/shared/types';
+import { AccountWithNoteInfo, AddressType } from '@/shared/types';
 import { useWallet } from '@/ui/utils';
 
 import { AppState } from '..';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { useCurrentKeyring } from '../keyrings/hooks';
 import { keyringsActions } from '../keyrings/reducer';
-import { settingsActions } from '../settings/reducer';
 import { accountActions } from './reducer';
 
 export function useAccountsState(): AppState['accounts'] {
   return useAppSelector((state) => state.accounts);
 }
 
-export function useCurrentAccount() {
+export function useCurrentAccount(): AccountWithNoteInfo {
   const accountsState = useAccountsState();
   return accountsState.current;
 }
@@ -109,7 +108,7 @@ export function useAccountAddress() {
 export function useSetCurrentAccountCallback() {
   const dispatch = useAppDispatch();
   return useCallback(
-    (account: Account) => {
+    (account: AccountWithNoteInfo) => {
       dispatch(accountActions.setCurrent(account));
     },
     [dispatch]
@@ -127,7 +126,7 @@ export function useImportAccountCallback() {
       try {
         const alianName = await wallet.getNextAlianName(currentKeyring);
         await wallet.createKeyringWithPrivateKey(privateKey, addressType, alianName);
-        const currentAccount = await wallet.getCurrentAccount();
+        const currentAccount = await wallet.getCurrentNoteAccount();
         dispatch(accountActions.setCurrent(currentAccount));
 
         success = true;
@@ -198,7 +197,6 @@ export function useFetchBalanceCallback() {
         address: currentAccount.address,
         amount: _accountBalance.amount,
         btc_amount: _accountBalance.btc_amount,
-        inscription_amount: _accountBalance.inscription_amount,
         confirm_btc_amount: _accountBalance.confirm_btc_amount,
         pending_btc_amount: _accountBalance.pending_btc_amount
       })
@@ -207,10 +205,6 @@ export function useFetchBalanceCallback() {
       wallet.expireUICachedData(currentAccount.address);
       dispatch(accountActions.expireHistory());
     }
-
-    const summary = await wallet.getAddressSummary(currentAccount.address);
-    summary.address = currentAccount.address;
-    dispatch(accountActions.setAddressSummary(summary));
   }, [dispatch, wallet, currentAccount, balance]);
 }
 
@@ -224,17 +218,17 @@ export function useReloadAccounts() {
     const currentKeyring = await wallet.getCurrentKeyring();
     dispatch(keyringsActions.setCurrent(currentKeyring));
 
-    const _accounts = await wallet.getAccounts();
+    const _accounts = await wallet.getNoteAccounts();
     dispatch(accountActions.setAccounts(_accounts));
 
-    const account = await wallet.getCurrentAccount();
+    const account = await wallet.getCurrentNoteAccount();
     dispatch(accountActions.setCurrent(account));
 
     dispatch(accountActions.expireBalance());
     dispatch(accountActions.expireInscriptions());
 
-    wallet.getWalletConfig().then((data) => {
-      dispatch(settingsActions.updateSettings({ walletConfig: data }));
-    });
+    // wallet.getWalletConfig().then((data) => {
+    //   dispatch(settingsActions.updateSettings({ walletConfig: data }));
+    // });
   }, [dispatch, wallet]);
 }

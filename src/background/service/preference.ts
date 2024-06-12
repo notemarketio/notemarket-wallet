@@ -6,6 +6,7 @@ import { AddressFlagType, EVENTS } from '@/shared/constant';
 import eventBus from '@/shared/eventBus';
 import {
   Account,
+  AccountWithNoteInfo,
   AddressTokenSummary,
   AddressType,
   AppSummary,
@@ -220,7 +221,7 @@ class PreferenceService {
     return cloneDeep(this.store.currentAccount);
   };
 
-  setCurrentAccount = (account?: Account | null) => {
+  setCurrentAccount = (account?: AccountWithNoteInfo | null) => {
     this.store.currentAccount = account;
     if (account) {
       sessionService.broadcastEvent('accountsChanged', [account.address]);

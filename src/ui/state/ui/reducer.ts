@@ -20,9 +20,7 @@ export interface UIState {
 }
 
 export enum AssetTabKey {
-  ORDINALS,
-  ATOMICALS,
-  RUNES
+  N20
 }
 
 export enum OrdinalsAssetTabKey {
@@ -38,7 +36,7 @@ export enum AtomicalsAssetTabKey {
 }
 
 export const initialState: UIState = {
-  assetTabKey: AssetTabKey.ORDINALS,
+  assetTabKey: AssetTabKey.N20,
   ordinalsAssetTabKey: OrdinalsAssetTabKey.ALL,
   atomicalsAssetTabKey: AtomicalsAssetTabKey.ARC20,
   uiTxCreateScreen: {
@@ -73,12 +71,6 @@ const slice = createSlice({
       const { payload } = action;
       if (payload.assetTabKey !== undefined) {
         state.assetTabKey = payload.assetTabKey;
-      }
-      if (payload.ordinalsAssetTabKey !== undefined) {
-        state.ordinalsAssetTabKey = payload.ordinalsAssetTabKey;
-      }
-      if (payload.atomicalsAssetTabKey !== undefined) {
-        state.atomicalsAssetTabKey = payload.atomicalsAssetTabKey;
       }
       return state;
     },
@@ -118,13 +110,7 @@ const slice = createSlice({
     builder.addCase(updateVersion, (state) => {
       // todo
       if (!state.assetTabKey) {
-        state.assetTabKey = AssetTabKey.ORDINALS;
-      }
-      if (!state.ordinalsAssetTabKey) {
-        state.ordinalsAssetTabKey = OrdinalsAssetTabKey.ALL;
-      }
-      if (!state.atomicalsAssetTabKey) {
-        state.atomicalsAssetTabKey = AtomicalsAssetTabKey.ARC20;
+        state.assetTabKey = AssetTabKey.N20;
       }
       if (!state.uiTxCreateScreen) {
         state.uiTxCreateScreen = initialState.uiTxCreateScreen;

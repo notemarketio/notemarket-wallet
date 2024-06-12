@@ -15,7 +15,7 @@ import {
 } from '@/ui/state/transactions/hooks';
 import { colors } from '@/ui/theme/colors';
 import { isValidAddress } from '@/ui/utils';
-import { getAddressUtxoDust } from '@unisat/wallet-sdk/lib/transaction';
+import { getAddressUtxoDust } from '@notemarket/wallet-sdk/lib/transaction';
 
 export default function SendArc20Screen() {
   const { state } = useLocation();

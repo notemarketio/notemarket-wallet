@@ -1,11 +1,19 @@
-import { Account, AddressSummary, AppSummary, Inscription, InscriptionSummary, TxHistoryItem } from '@/shared/types';
+import {
+  Account,
+  AccountWithNoteInfo,
+  AddressSummary,
+  AppSummary,
+  Inscription,
+  InscriptionSummary,
+  TxHistoryItem
+} from '@/shared/types';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { updateVersion } from '../global/actions';
 
 export interface AccountsState {
-  accounts: Account[];
-  current: Account;
+  accounts: AccountWithNoteInfo[];
+  current: AccountWithNoteInfo;
   loading: boolean;
   balanceMap: {
     [key: string]: {
@@ -13,7 +21,6 @@ export interface AccountsState {
       btc_amount: string;
       confirm_btc_amount: string;
       pending_btc_amount: string;
-      inscription_amount: string;
       expired: boolean;
     };
   };
@@ -34,7 +41,7 @@ export interface AccountsState {
   addressSummary: AddressSummary;
 }
 
-const initialAccount = {
+const initialAccount: AccountWithNoteInfo = {
   type: '',
   address: '',
   brandName: '',
@@ -44,7 +51,12 @@ const initialAccount = {
   balance: 0,
   pubkey: '',
   key: '',
-  flag: 0
+  flag: 0,
+  noteInfo: {
+    address: '',
+    script: '',
+    scriptHash: ''
+  }
 };
 
 export const initialState: AccountsState = {
@@ -69,7 +81,9 @@ export const initialState: AccountsState = {
     brc20Count: 0,
     brc20Count5Byte: 0,
     arc20Count: 0,
-    loading: true
+    loading: true,
+    address: '',
+    runesCount: 0
   }
 };
 
@@ -80,11 +94,11 @@ const slice = createSlice({
     pendingLogin(state) {
       state.loading = true;
     },
-    setCurrent(state, action: { payload: Account }) {
+    setCurrent(state, action: { payload: AccountWithNoteInfo }) {
       const { payload } = action;
-      state.current = payload || initialAccount;
+      state.current = payload;
     },
-    setAccounts(state, action: { payload: Account[] }) {
+    setAccounts(state, action: { payload: AccountWithNoteInfo[] }) {
       const { payload } = action;
       state.accounts = payload;
     },
@@ -95,26 +109,23 @@ const slice = createSlice({
           address: string;
           amount: string;
           btc_amount: string;
-          inscription_amount: string;
           confirm_btc_amount: string;
           pending_btc_amount: string;
         };
       }
     ) {
       const {
-        payload: { address, amount, btc_amount, inscription_amount, confirm_btc_amount, pending_btc_amount }
+        payload: { address, amount, btc_amount, confirm_btc_amount, pending_btc_amount }
       } = action;
       state.balanceMap[address] = state.balanceMap[address] || {
         amount: '0',
         btc_amount: '0',
-        inscription_amount: '0',
         confirm_btc_amount: '0',
         pending_btc_amount: '0',
         expired: true
       };
       state.balanceMap[address].amount = amount;
       state.balanceMap[address].btc_amount = btc_amount;
-      state.balanceMap[address].inscription_amount = inscription_amount;
       state.balanceMap[address].confirm_btc_amount = confirm_btc_amount;
       state.balanceMap[address].pending_btc_amount = pending_btc_amount;
       state.balanceMap[address].expired = false;
@@ -221,7 +232,9 @@ const slice = createSlice({
           atomicalsCount: 0,
           brc20Count: 0,
           brc20Count5Byte: 0,
-          arc20Count: 0
+          arc20Count: 0,
+          address: '',
+          runesCount: 0
         };
       }
     });

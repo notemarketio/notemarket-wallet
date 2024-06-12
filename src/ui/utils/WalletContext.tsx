@@ -1,12 +1,12 @@
 import { createContext, ReactNode, useContext } from 'react';
 
-import { AccountAsset } from '@/background/controller/wallet';
 import { ContactBookItem, ContactBookStore } from '@/background/service/contactBook';
 import { ToSignInput } from '@/background/service/keyring';
 import { ConnectedSite } from '@/background/service/permission';
 import { AddressFlagType } from '@/shared/constant';
 import {
   Account,
+  AccountWithNoteInfo,
   AddressRunesTokenSummary,
   AddressSummary,
   AddressTokenSummary,
@@ -18,6 +18,7 @@ import {
   InscribeOrder,
   Inscription,
   InscriptionSummary,
+  N20Balance,
   NetworkType,
   RuneBalance,
   SignPsbtOptions,
@@ -30,8 +31,8 @@ import {
   WalletConfig,
   WalletKeyring
 } from '@/shared/types';
-import { AddressType, UnspentOutput } from '@unisat/wallet-sdk';
-import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
+import { AddressType, UnspentOutput } from '@notemarket/wallet-sdk';
+import { bitcoin } from '@notemarket/wallet-sdk/lib/bitcoin-core';
 
 export interface WalletController {
   openapi: {
@@ -72,8 +73,6 @@ export interface WalletController {
 
   getAddressHistory: (address: string) => Promise<TxHistoryItem[]>;
   getAddressCacheHistory: (address: string) => Promise<TxHistoryItem[]>;
-
-  listChainAssets: (address: string) => Promise<AccountAsset[]>;
 
   getLocale(): Promise<string>;
   setLocale(locale: string): Promise<void>;
@@ -135,6 +134,9 @@ export interface WalletController {
 
   getCurrentAccount(): Promise<Account>;
   getAccounts(): Promise<Account[]>;
+  fillNoteAccount(account: Account): AccountWithNoteInfo;
+  getCurrentNoteAccount(): Promise<AccountWithNoteInfo>;
+  getNoteAccounts(): Promise<AccountWithNoteInfo[]>;
   getNextAlianName: (keyring: WalletKeyring) => Promise<string>;
 
   getCurrentKeyringAccounts(): Promise<Account[]>;
@@ -238,6 +240,8 @@ export interface WalletController {
     pageSize: number
   ): Promise<{ currentPage: number; pageSize: number; total: number; list: TokenBalance[] }>;
 
+  getN20List(account: AccountWithNoteInfo): Promise<N20Balance[]>;
+
   getBRC20List5Byte(
     address: string,
     currentPage: number,
@@ -315,8 +319,8 @@ export interface WalletController {
   setShowSafeNotice(show: boolean): Promise<void>;
 
   // address flag
-  addAddressFlag(account: Account, flag: AddressFlagType): Promise<Account>;
-  removeAddressFlag(account: Account, flag: AddressFlagType): Promise<Account>;
+  addAddressFlag<T extends Account | AccountWithNoteInfo>(account: T, flag: AddressFlagType): Promise<T>;
+  removeAddressFlag<T extends Account | AccountWithNoteInfo>(account: T, flag: AddressFlagType): Promise<T>;
 
   getVersionDetail(version: string): Promise<VersionDetail>;
 

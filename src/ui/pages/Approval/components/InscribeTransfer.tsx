@@ -23,7 +23,7 @@ import {
 import { fontSizes } from '@/ui/theme/font';
 import { spacing } from '@/ui/theme/spacing';
 import { satoshisToAmount, useApproval, useLocationState, useWallet } from '@/ui/utils';
-import { getAddressUtxoDust } from '@unisat/wallet-sdk/lib/transaction';
+import { getAddressUtxoDust } from '@notemarket/wallet-sdk/lib/transaction';
 
 import { useNavigate } from '../../MainRoute';
 import SignPsbt from './SignPsbt';

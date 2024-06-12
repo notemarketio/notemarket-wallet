@@ -1,9 +1,8 @@
 import { Tabs, Tooltip } from 'antd';
 import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 
-import { AddressFlagType, KEYRING_TYPE } from '@/shared/constant';
+import { KEYRING_TYPE } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
-import { checkAddressFlag } from '@/shared/utils';
 import { Card, Column, Content, Footer, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import AccountSelect from '@/ui/components/AccountSelect';
 import { AddressBar } from '@/ui/components/AddressBar';
@@ -13,12 +12,12 @@ import { NavTabBar } from '@/ui/components/NavTabBar';
 import { NoticePopover } from '@/ui/components/NoticePopover';
 import { UpgradePopover } from '@/ui/components/UpgradePopover';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
-import { useAccountBalance, useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { accountActions } from '@/ui/state/accounts/reducer';
+import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import {
   useBlockstreamUrl,
+  useNOTEExplorerUrl,
   useNetworkType,
   useSkipVersionCallback,
   useVersionInfo,
@@ -32,9 +31,7 @@ import { amountToSatoshis, satoshisToAmount, useWallet } from '@/ui/utils';
 
 import { BuyBTCModal } from '../../BuyBTC/BuyBTCModal';
 import { useNavigate } from '../../MainRoute';
-import { AtomicalsTab } from './AtomicalsTab';
-import { OrdinalsTab } from './OrdinalsTab';
-import { RunesList } from './RunesList';
+import { N20List } from './N20List';
 
 const $noBreakStyle: CSSProperties = {
   whiteSpace: 'nowrap',
@@ -89,23 +86,6 @@ export default function WalletTabScreen() {
   const unavailableAmount = satoshisToAmount(unavailableSatoshis);
   const totalAmount = satoshisToAmount(totalSatoshis);
 
-  const addressSummary = useAddressSummary();
-
-  useEffect(() => {
-    if (currentAccount.address === addressSummary.address) {
-      if (addressSummary.arc20Count > 0 || addressSummary.runesCount > 0) {
-        if (!checkAddressFlag(currentAccount.flag, AddressFlagType.CONFIRMED_UTXO_MODE)) {
-          if (!checkAddressFlag(currentAccount.flag, AddressFlagType.DISABLE_AUTO_SWITCH_CONFIRMED)) {
-            wallet.addAddressFlag(currentAccount, AddressFlagType.CONFIRMED_UTXO_MODE).then((account) => {
-              dispatch(accountActions.setCurrent(account));
-            });
-            setShowDisableUnconfirmedUtxoNotice(true);
-          }
-        }
-      }
-    }
-  }, [addressSummary, currentAccount]);
-
   useEffect(() => {
     const run = async () => {
       const show = await wallet.getShowSafeNotice();
@@ -123,23 +103,14 @@ export default function WalletTabScreen() {
 
   const tabItems = [
     {
-      key: AssetTabKey.ORDINALS,
-      label: 'Ordinals',
-      children: <OrdinalsTab />
-    },
-    {
-      key: AssetTabKey.ATOMICALS,
-      label: 'Atomicals',
-      children: <AtomicalsTab />
-    },
-    {
-      key: AssetTabKey.RUNES,
-      label: 'Runes',
-      children: <RunesList />
+      key: AssetTabKey.N20,
+      label: 'N20',
+      children: <N20List />
     }
   ];
 
   const blockstreamUrl = useBlockstreamUrl();
+  const noteExplorerUrl = useNOTEExplorerUrl();
   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
 
   const [buyBtcModalVisible, setBuyBtcModalVisible] = useState(false);
@@ -239,6 +210,19 @@ export default function WalletTabScreen() {
               itemsCenter
               onClick={() => {
                 window.open(`${blockstreamUrl}/address/${currentAccount.address}`);
+              }}>
+              <Text text={'View History'} size="xs" />
+              <Icon icon="link" size={fontSizes.xs} />
+            </Row>
+          </Row>
+
+          <Row itemsCenter justifyCenter>
+            <AddressBar noteAddress />
+            <Row
+              style={{ marginLeft: 8 }}
+              itemsCenter
+              onClick={() => {
+                window.open(`${noteExplorerUrl}/address?q=${currentAccount.noteInfo.address}`);
               }}>
               <Text text={'View History'} size="xs" />
               <Icon icon="link" size={fontSizes.xs} />
