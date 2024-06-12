@@ -197,7 +197,6 @@ export function useFetchBalanceCallback() {
         address: currentAccount.address,
         amount: _accountBalance.amount,
         btc_amount: _accountBalance.btc_amount,
-        inscription_amount: _accountBalance.inscription_amount,
         confirm_btc_amount: _accountBalance.confirm_btc_amount,
         pending_btc_amount: _accountBalance.pending_btc_amount
       })
@@ -206,10 +205,6 @@ export function useFetchBalanceCallback() {
       wallet.expireUICachedData(currentAccount.address);
       dispatch(accountActions.expireHistory());
     }
-
-    const summary = await wallet.getAddressSummary(currentAccount.address);
-    summary.address = currentAccount.address;
-    dispatch(accountActions.setAddressSummary(summary));
   }, [dispatch, wallet, currentAccount, balance]);
 }
 

@@ -18,8 +18,6 @@ import {
   AddressFlagType,
   BRAND_ALIAN_TYPE_TEXT,
   CHAINS_ENUM,
-  COIN_NAME,
-  COIN_SYMBOL,
   KEYRING_TYPE,
   KEYRING_TYPES,
   NETWORK_TYPES,
@@ -27,7 +25,7 @@ import {
   OPENAPI_URL_TESTNET,
   UNCONFIRMED_HEIGHT
 } from '@/shared/constant';
-import { generateP2TRNoteInfo } from '@/shared/lib/note-utils';
+import { generateP2TRNoteInfo, toAddressType } from '@/shared/lib/note-utils';
 import { runesUtils } from '@/shared/lib/runes-utils';
 import {
   Account,
@@ -44,7 +42,7 @@ import {
   UTXO,
   WalletKeyring
 } from '@/shared/types';
-import { checkAddressFlag } from '@/shared/utils';
+import { checkAddressFlag, fromUnitInteger } from '@/shared/utils';
 import { UnspentOutput, txHelpers } from '@notemarket/wallet-sdk';
 import { publicKeyToAddress, scriptPkToAddress } from '@notemarket/wallet-sdk/lib/address';
 import { ECPair, bitcoin } from '@notemarket/wallet-sdk/lib/bitcoin-core';
@@ -138,10 +136,30 @@ export class WalletController extends BaseController {
     preferenceService.setPopupOpen(isOpen);
   };
 
-  getAddressBalance = async (address: string) => {
-    const data = await openapiService.getAddressBalance(address);
-    preferenceService.updateAddressBalance(address, data);
-    return data;
+  getAddressBalance = async (address: string): Promise<BitcoinBalance> => {
+    const networkType = this.getNetworkType();
+
+    const script = bitcoin.address.toOutputScript(address, toPsbtNetwork(networkType));
+
+    const scriptHash = bitcoin.crypto.sha256(script).reverse().toString('hex');
+
+    const data = await this.noteapi.balance(scriptHash);
+
+    const amount = BigInt(data.confirmed) + BigInt(data.unconfirmed);
+    const btcAmount = fromUnitInteger(amount.toString(), 8).toString();
+    const confirmBTCAmount = fromUnitInteger(data.confirmed, 8).toString();
+    const pendingBTCAmount = fromUnitInteger(data.unconfirmed, 8).toString();
+
+    const balance: BitcoinBalance = {
+      amount: btcAmount,
+      confirm_amount: confirmBTCAmount,
+      pending_amount: confirmBTCAmount,
+      confirm_btc_amount: confirmBTCAmount,
+      pending_btc_amount: pendingBTCAmount,
+      btc_amount: btcAmount
+    };
+    preferenceService.updateAddressBalance(address, balance);
+    return balance;
   };
 
   getMultiAddressAssets = async (addresses: string) => {
@@ -157,13 +175,9 @@ export class WalletController extends BaseController {
       confirm_amount: '0',
       pending_amount: '0',
       amount: '0',
-      usd_value: '0',
       confirm_btc_amount: '0',
       pending_btc_amount: '0',
-      btc_amount: '0',
-      confirm_inscription_amount: '0',
-      pending_inscription_amount: '0',
-      inscription_amount: '0'
+      btc_amount: '0'
     };
     if (!address) return defaultBalance;
     return preferenceService.getAddressBalance(address) || defaultBalance;
@@ -410,7 +424,9 @@ export class WalletController extends BaseController {
 
   changeKeyring = (keyring: WalletKeyring, accountIndex = 0) => {
     preferenceService.setCurrentKeyringIndex(keyring.index);
-    preferenceService.setCurrentAccount(keyring.accounts[accountIndex]);
+
+    const account = this.fillNoteAccount(keyring.accounts[accountIndex]);
+    preferenceService.setCurrentAccount(account);
     const flag = preferenceService.getAddressFlag(keyring.accounts[accountIndex].address);
     openapiService.setClientAddress(keyring.accounts[accountIndex].address, flag);
   };
@@ -730,14 +746,6 @@ export class WalletController extends BaseController {
     return preferenceService.updateIsFirstOpen();
   };
 
-  listChainAssets = async (pubkeyAddress: string) => {
-    const balance = await openapiService.getAddressBalance(pubkeyAddress);
-    const assets: AccountAsset[] = [
-      { name: COIN_NAME, symbol: COIN_SYMBOL, amount: balance.amount, value: balance.usd_value }
-    ];
-    return assets;
-  };
-
   reportErrors = (error: string) => {
     console.error('report not implemented');
   };
@@ -771,12 +779,16 @@ export class WalletController extends BaseController {
     return NETWORK_TYPES[networkType].name;
   };
 
-  getBTCUtxos = async () => {
+  getBTCUtxos = async (): Promise<UnspentOutput[]> => {
     // getBTCAccount
     const account = preferenceService.getCurrentAccount();
     if (!account) throw new Error('no current account');
 
-    let utxos = await openapiService.getBTCUtxos(account.address);
+    const networkType = this.getNetworkType();
+    const script = bitcoin.address.toOutputScript(account.address, toPsbtNetwork(networkType));
+    const scriptHash = bitcoin.crypto.sha256(script).reverse().toString('hex');
+
+    let utxos = await this.noteapi.utxos(scriptHash);
 
     if (checkAddressFlag(openapiService.addressFlag, AddressFlagType.CONFIRMED_UTXO_MODE)) {
       utxos = utxos.filter((v) => (v as any).height !== UNCONFIRMED_HEIGHT);
@@ -784,14 +796,14 @@ export class WalletController extends BaseController {
 
     const btcUtxos = utxos.map((v) => {
       return {
-        txid: v.txid,
-        vout: v.vout,
+        txid: v.txId,
+        vout: v.outputIndex,
         satoshis: v.satoshis,
-        scriptPk: v.scriptPk,
-        addressType: v.addressType,
+        scriptPk: script.toString('hex'),
+        addressType: toAddressType(v.type),
         pubkey: account.pubkey,
-        inscriptions: v.inscriptions,
-        atomicals: v.atomicals
+        inscriptions: [],
+        atomicals: []
       };
     });
     return btcUtxos;

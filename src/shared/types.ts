@@ -38,10 +38,6 @@ export interface BitcoinBalance {
   confirm_btc_amount: string;
   pending_btc_amount: string;
   btc_amount: string;
-  confirm_inscription_amount: string;
-  pending_inscription_amount: string;
-  inscription_amount: string;
-  usd_value: string;
 }
 
 export interface AddressAssets {
@@ -464,3 +460,16 @@ export interface AddressRunesTokenSummary {
   runeBalance: RuneBalance;
   runeLogo?: Inscription;
 }
+
+export type NOTEAddressType =
+  | 'P2PKH'
+  | 'P2PK-NOTE'
+  | 'P2SH'
+  | 'P2SH-NOTE'
+  | 'P2WPKH'
+  | 'P2WSH'
+  | 'P2WSH-NOTE'
+  | 'P2TR'
+  | 'P2TR-NOTE-V1'
+  | 'P2TR-NOTE'
+  | 'P2TR-COMMIT-NOTE';

@@ -36,7 +36,7 @@
     "@fortawesome/react-fontawesome": "^0.1.18",
     "@keystonehq/animated-qr": "^0.8.6",
     "@metamask/obs-store": "^7.0.0",
-    "@notemarket/wallet-sdk": "^1.0.0",
+    "@notemarket/wallet-sdk": "^1.0.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@reduxjs/toolkit": "^1.9.2",
     "@sentry/browser": "^6.19.7",

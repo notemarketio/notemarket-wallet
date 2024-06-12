@@ -1,6 +1,5 @@
 import { createContext, ReactNode, useContext } from 'react';
 
-import { AccountAsset } from '@/background/controller/wallet';
 import { ContactBookItem, ContactBookStore } from '@/background/service/contactBook';
 import { ToSignInput } from '@/background/service/keyring';
 import { ConnectedSite } from '@/background/service/permission';
@@ -74,8 +73,6 @@ export interface WalletController {
 
   getAddressHistory: (address: string) => Promise<TxHistoryItem[]>;
   getAddressCacheHistory: (address: string) => Promise<TxHistoryItem[]>;
-
-  listChainAssets: (address: string) => Promise<AccountAsset[]>;
 
   getLocale(): Promise<string>;
   setLocale(locale: string): Promise<void>;

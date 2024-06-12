@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, isAxiosError } from 'axios';
 
-import { NetworkType } from '@/shared/types';
+import { NOTEAddressType, NetworkType } from '@/shared/types';
 
 import { preferenceService } from '.';
 import { createPersistStore } from '../utils';
@@ -35,6 +35,40 @@ export class NoteApiService {
       this.store.endpoint = TESTNET_API_ENDPOINT;
     }
   };
+
+  async balance(scriptHash: string) {
+    const data = await this.request<{
+      confirmed: string;
+      unconfirmed: string;
+    }>('POST', '/balance', {
+      data: {
+        scriptHash
+      }
+    });
+    return data;
+  }
+
+  async utxos(scriptHash: string) {
+    const data = await this.request<
+      {
+        address: string;
+        txId: string;
+        outputIndex: number;
+        height: number;
+        satoshis: number;
+        script: string;
+        scriptHash: string;
+        type: NOTEAddressType;
+        time: number;
+      }[]
+    >('POST', '/utxos', {
+      data: {
+        scriptHashs: [scriptHash]
+      }
+    });
+
+    return data;
+  }
 
   async tokenList(scriptHash: string) {
     const data = await this.request<

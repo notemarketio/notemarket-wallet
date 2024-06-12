@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 
 import eventBus from '@/shared/eventBus';
-import { Account } from '@/shared/types';
+import { AccountWithNoteInfo } from '@/shared/types';
 import { useWallet } from '@/ui/utils';
 
 import { useIsUnlocked } from '../global/hooks';
@@ -57,16 +57,16 @@ export default function AccountUpdater() {
   }, [fetchBalance, wallet, isUnlocked, self]);
 
   useEffect(() => {
-    const accountChangeHandler = (account: Account) => {
+    const accountChangeHandler = (account: AccountWithNoteInfo) => {
       if (account && account.address) {
-        dispatch(accountActions.setCurrent(wallet.fillNoteAccount(account)));
+        dispatch(accountActions.setCurrent(account));
       }
     };
     eventBus.addEventListener('accountsChanged', accountChangeHandler);
     return () => {
       eventBus.removeEventListener('accountsChanged', accountChangeHandler);
     };
-  }, [dispatch]);
+  }, [dispatch, wallet]);
 
   return null;
 }

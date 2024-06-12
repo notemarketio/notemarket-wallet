@@ -1,9 +1,8 @@
 import { Tabs, Tooltip } from 'antd';
 import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 
-import { AddressFlagType, KEYRING_TYPE } from '@/shared/constant';
+import { KEYRING_TYPE } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
-import { checkAddressFlag } from '@/shared/utils';
 import { Card, Column, Content, Footer, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import AccountSelect from '@/ui/components/AccountSelect';
 import { AddressBar } from '@/ui/components/AddressBar';
@@ -13,8 +12,7 @@ import { NavTabBar } from '@/ui/components/NavTabBar';
 import { NoticePopover } from '@/ui/components/NoticePopover';
 import { UpgradePopover } from '@/ui/components/UpgradePopover';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
-import { useAccountBalance, useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { accountActions } from '@/ui/state/accounts/reducer';
+import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import {
@@ -87,23 +85,6 @@ export default function WalletTabScreen() {
   const avaiableAmount = safeBalance;
   const unavailableAmount = satoshisToAmount(unavailableSatoshis);
   const totalAmount = satoshisToAmount(totalSatoshis);
-
-  const addressSummary = useAddressSummary();
-
-  useEffect(() => {
-    if (currentAccount.address === addressSummary.address) {
-      if (addressSummary.arc20Count > 0 || addressSummary.runesCount > 0) {
-        if (!checkAddressFlag(currentAccount.flag, AddressFlagType.CONFIRMED_UTXO_MODE)) {
-          if (!checkAddressFlag(currentAccount.flag, AddressFlagType.DISABLE_AUTO_SWITCH_CONFIRMED)) {
-            wallet.addAddressFlag(currentAccount, AddressFlagType.CONFIRMED_UTXO_MODE).then((account) => {
-              dispatch(accountActions.setCurrent(account));
-            });
-            setShowDisableUnconfirmedUtxoNotice(true);
-          }
-        }
-      }
-    }
-  }, [addressSummary, currentAccount]);
 
   useEffect(() => {
     const run = async () => {

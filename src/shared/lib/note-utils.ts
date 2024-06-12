@@ -1,8 +1,9 @@
+import { AddressType } from '@notemarket/wallet-sdk';
 import { bitcoin } from '@notemarket/wallet-sdk/lib/bitcoin-core';
 import { toPsbtNetwork } from '@notemarket/wallet-sdk/lib/network';
 import { toXOnly } from '@notemarket/wallet-sdk/lib/utils';
 
-import { NetworkType } from '../types';
+import { NOTEAddressType, NetworkType } from '../types';
 
 const NOTE_PROTOCOL_ENVELOPE_ID = 'NOTE';
 
@@ -116,4 +117,27 @@ export const generateP2TRNoteInfo = (pubkey: Buffer, networkType: NetworkType) =
     deprecatedNoteP2TR,
     deprecatedP2PKP2TR
   };
+};
+
+export const toAddressType = (type: NOTEAddressType): AddressType => {
+  switch (type) {
+    case 'P2PKH':
+    case 'P2PK-NOTE':
+      return AddressType.P2PKH;
+    case 'P2SH':
+    case 'P2SH-NOTE':
+      return AddressType.P2SH;
+    case 'P2WPKH':
+      return AddressType.P2WPKH;
+    case 'P2WSH':
+    case 'P2WSH-NOTE':
+      return AddressType.P2WSH;
+    case 'P2TR':
+    case 'P2TR-COMMIT-NOTE':
+    case 'P2TR-NOTE':
+    case 'P2TR-NOTE-V1':
+      return AddressType.P2TR;
+    default:
+      return AddressType.UNKNOWN;
+  }
 };

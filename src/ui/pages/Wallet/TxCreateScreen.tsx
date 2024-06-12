@@ -184,20 +184,22 @@ export default function TxCreateScreen() {
             {spendUnavailableSatoshis > 0 && (
               <Row>
                 <Text text={`${spendUnavailableAmount}`} size="sm" style={{ color: '#65D5F0' }} />
-                <Text text={`BTC`} size="sm" color="textDim" />
-                <Text text={`+`} size="sm" color="textDim" />
+                <Text text={'BTC'} size="sm" color="textDim" />
+                <Text text={'+'} size="sm" color="textDim" />
               </Row>
             )}
 
             <Row>
               <Text text={`${avaiableAmount}`} size="sm" color="gold" />
-              <Text text={`BTC`} size="sm" color="textDim" />
+              <Text text={'BTC'} size="sm" color="textDim" />
             </Row>
           </Row>
 
           <Row justifyBetween>
             <Tooltip
-              title={`Includes Inscriptions, ARC20, Runes, and unconfirmed UTXO assets. Future versions will support spending these assets.`}
+              title={
+                'Includes Inscriptions, ARC20, Runes, and unconfirmed UTXO assets. Future versions will support spending these assets.'
+              }
               overlayStyle={{
                 fontSize: fontSizes.xs
               }}>
@@ -220,12 +222,12 @@ export default function TxCreateScreen() {
             {spendUnavailableSatoshis > 0 ? (
               <Row>
                 <Text text={`${unspendUnavailableAmount}`} size="sm" color="textDim" />
-                <Text text={`BTC`} size="sm" color="textDim" />
+                <Text text={'BTC'} size="sm" color="textDim" />
               </Row>
             ) : (
               <Row>
                 <Text text={`${unavailableAmount}`} size="sm" color="textDim" />
-                <Text text={`BTC`} size="sm" color="textDim" />
+                <Text text={'BTC'} size="sm" color="textDim" />
               </Row>
             )}
           </Row>
@@ -234,7 +236,7 @@ export default function TxCreateScreen() {
             <Text text="Total" color="textDim" />
             <Row>
               <Text text={`${totalAmount}`} size="sm" color="textDim" />
-              <Text text={`BTC`} size="sm" color="textDim" />
+              <Text text={'BTC'} size="sm" color="textDim" />
             </Row>
           </Row>
         </Column>
