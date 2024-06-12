@@ -19,6 +19,7 @@ import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import {
   useBlockstreamUrl,
+  useNOTEExplorerUrl,
   useNetworkType,
   useSkipVersionCallback,
   useVersionInfo,
@@ -140,6 +141,7 @@ export default function WalletTabScreen() {
   ];
 
   const blockstreamUrl = useBlockstreamUrl();
+  const noteExplorerUrl = useNOTEExplorerUrl();
   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
 
   const [buyBtcModalVisible, setBuyBtcModalVisible] = useState(false);
@@ -239,6 +241,19 @@ export default function WalletTabScreen() {
               itemsCenter
               onClick={() => {
                 window.open(`${blockstreamUrl}/address/${currentAccount.address}`);
+              }}>
+              <Text text={'View History'} size="xs" />
+              <Icon icon="link" size={fontSizes.xs} />
+            </Row>
+          </Row>
+
+          <Row itemsCenter justifyCenter>
+            <AddressBar noteAddress />
+            <Row
+              style={{ marginLeft: 8 }}
+              itemsCenter
+              onClick={() => {
+                window.open(`${noteExplorerUrl}/address?q=${currentAccount.noteInfo.address}`);
               }}>
               <Text text={'View History'} size="xs" />
               <Icon icon="link" size={fontSizes.xs} />

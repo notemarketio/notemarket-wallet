@@ -74,6 +74,15 @@ export function useBlockstreamUrl() {
   }
 }
 
+export function useNOTEExplorerUrl() {
+  const networkType = useNetworkType();
+  if (networkType === NetworkType.MAINNET) {
+    return 'https://explorer.noteprotocol.org';
+  } else {
+    return 'https://testnet4.noteprotocol.org';
+  }
+}
+
 export function useTxIdUrl(txid: string) {
   const networkType = useNetworkType();
   if (networkType === NetworkType.MAINNET) {

@@ -59,7 +59,7 @@ export default function AccountUpdater() {
   useEffect(() => {
     const accountChangeHandler = (account: Account) => {
       if (account && account.address) {
-        dispatch(accountActions.setCurrent(account));
+        dispatch(accountActions.setCurrent(wallet.fillNoteAccount(account)));
       }
     };
     eventBus.addEventListener('accountsChanged', accountChangeHandler);

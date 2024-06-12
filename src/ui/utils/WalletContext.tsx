@@ -7,6 +7,7 @@ import { ConnectedSite } from '@/background/service/permission';
 import { AddressFlagType } from '@/shared/constant';
 import {
   Account,
+  AccountWithNoteInfo,
   AddressRunesTokenSummary,
   AddressSummary,
   AddressTokenSummary,
@@ -135,6 +136,9 @@ export interface WalletController {
 
   getCurrentAccount(): Promise<Account>;
   getAccounts(): Promise<Account[]>;
+  fillNoteAccount(account: Account): AccountWithNoteInfo;
+  getCurrentNoteAccount(): Promise<AccountWithNoteInfo>;
+  getNoteAccounts(): Promise<AccountWithNoteInfo[]>;
   getNextAlianName: (keyring: WalletKeyring) => Promise<string>;
 
   getCurrentKeyringAccounts(): Promise<Account[]>;
@@ -315,8 +319,8 @@ export interface WalletController {
   setShowSafeNotice(show: boolean): Promise<void>;
 
   // address flag
-  addAddressFlag(account: Account, flag: AddressFlagType): Promise<Account>;
-  removeAddressFlag(account: Account, flag: AddressFlagType): Promise<Account>;
+  addAddressFlag<T extends Account | AccountWithNoteInfo>(account: T, flag: AddressFlagType): Promise<T>;
+  removeAddressFlag<T extends Account | AccountWithNoteInfo>(account: T, flag: AddressFlagType): Promise<T>;
 
   getVersionDetail(version: string): Promise<VersionDetail>;
 

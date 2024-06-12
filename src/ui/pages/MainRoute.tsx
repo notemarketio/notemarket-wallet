@@ -283,11 +283,11 @@ const Main = () => {
   const init = useCallback(async () => {
     try {
       if (!self.accountLoaded) {
-        const currentAccount = await wallet.getCurrentAccount();
+        const currentAccount = await wallet.getCurrentNoteAccount();
         if (currentAccount) {
           dispatch(accountActions.setCurrent(currentAccount));
 
-          const accounts = await wallet.getAccounts();
+          const accounts = await wallet.getNoteAccounts();
           dispatch(accountActions.setAccounts(accounts));
 
           if (accounts.length > 0) {

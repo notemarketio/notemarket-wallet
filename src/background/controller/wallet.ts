@@ -23,9 +23,11 @@ import {
   OPENAPI_URL_TESTNET,
   UNCONFIRMED_HEIGHT
 } from '@/shared/constant';
+import { generateP2TRNoteInfo } from '@/shared/lib/note-utils';
 import { runesUtils } from '@/shared/lib/runes-utils';
 import {
   Account,
+  AccountWithNoteInfo,
   AddressType,
   AddressUserToSignInput,
   BitcoinBalance,
@@ -1199,6 +1201,30 @@ export class WalletController extends BaseController {
     return currentAccount;
   };
 
+  fillNoteAccount = (account: Account): AccountWithNoteInfo => {
+    const networkType = this.getNetworkType();
+    const noteInfo = generateP2TRNoteInfo(Buffer.from(account.pubkey, 'hex'), networkType);
+    return {
+      ...account,
+      noteInfo: {
+        address: noteInfo.address,
+        script: noteInfo.script,
+        scriptHash: noteInfo.scriptHash
+      }
+    };
+  };
+
+  getCurrentNoteAccount = async (): Promise<AccountWithNoteInfo | null> => {
+    const currentAccount = await this.getCurrentAccount();
+    if (!currentAccount) return null;
+    return this.fillNoteAccount(currentAccount);
+  };
+
+  getNoteAccounts = async (): Promise<AccountWithNoteInfo[]> => {
+    const accounts = await this.getAccounts();
+    return accounts.map(this.fillNoteAccount);
+  };
+
   getEditingKeyring = async () => {
     const editingKeyringIndex = preferenceService.getEditingKeyringIndex();
     const displayedKeyrings = await keyringService.getAllDisplayedKeyrings();
@@ -1349,12 +1375,12 @@ export class WalletController extends BaseController {
     return account;
   };
 
-  addAddressFlag = (account: Account, flag: AddressFlagType) => {
+  addAddressFlag = <T extends Account | AccountWithNoteInfo>(account: T, flag: AddressFlagType): T => {
     account.flag = preferenceService.addAddressFlag(account.address, flag);
     openapiService.setClientAddress(account.address, account.flag);
     return account;
   };
-  removeAddressFlag = (account: Account, flag: AddressFlagType) => {
+  removeAddressFlag = <T extends Account | AccountWithNoteInfo>(account: T, flag: AddressFlagType): T => {
     account.flag = preferenceService.removeAddressFlag(account.address, flag);
     openapiService.setClientAddress(account.address, account.flag);
     return account;

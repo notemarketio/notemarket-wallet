@@ -76,7 +76,7 @@ export const RemoveWalletPopover = ({ keyring, onClose }: { keyring: WalletKeyri
               dispatch(keyringsActions.setKeyrings(keyrings));
 
               if (nextKeyring) {
-                dispatch(accountActions.setCurrent(nextKeyring.accounts[0]));
+                dispatch(accountActions.setCurrent(wallet.fillNoteAccount(nextKeyring.accounts[0])));
                 return;
               }
 

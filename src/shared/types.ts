@@ -1,3 +1,5 @@
+import { bitcoin } from '@notemarket/wallet-sdk/lib/bitcoin-core';
+
 import { CHAINS_ENUM } from './constant';
 
 export enum AddressType {
@@ -230,6 +232,24 @@ export interface Account {
   balance?: number;
   key: string;
   flag: number;
+}
+
+export interface AccountWithNoteInfo extends Account {
+  noteInfo: {
+    address: string;
+    script: string;
+    scriptHash: string;
+  };
+}
+
+export interface P2TRNoteInfo {
+  address: string;
+  script: string;
+  scriptHash: string;
+  noteP2TR: bitcoin.payments.Payment;
+  noteRedeem: bitcoin.payments.Payment;
+  p2pkP2TR: bitcoin.payments.Payment;
+  p2pkRedeem: bitcoin.payments.Payment;
 }
 
 export interface InscribeOrder {

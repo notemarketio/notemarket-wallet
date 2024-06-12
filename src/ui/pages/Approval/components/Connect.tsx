@@ -176,7 +176,7 @@ export default function Connect({ params: { session } }: Props) {
                     const accountIndex = account.index || 0;
                     await wallet.changeKeyring(keyring, accountIndex);
                     dispatch(keyringsActions.setCurrent(keyring));
-                    const _currentAccount = await wallet.getCurrentAccount();
+                    const _currentAccount = await wallet.getCurrentNoteAccount();
                     dispatch(accountActions.setCurrent(_currentAccount));
                   }}
                 />
