@@ -34,6 +34,7 @@ import {
   AccountWithNoteInfo,
   AddressType,
   AddressUserToSignInput,
+  AppSummary,
   BitcoinBalance,
   N20Balance,
   NetworkType,
@@ -1270,7 +1271,30 @@ export class WalletController extends BaseController {
   getAppSummary = async () => {
     const appTab = preferenceService.getAppTab();
     try {
-      const data = await openapiService.getAppSummary();
+      const data: AppSummary = {
+        apps: [
+          {
+            logo: 'https://alpha.notemarket.io/logo.png',
+            title: 'NOTE Market',
+            desc: 'Trade NOTE protocol assets on the Bitcoin network.',
+            url: 'https://notemarket.io',
+            id: 1,
+            time: 0,
+            tag: 'Marketplace',
+            tagColor: 'rgba(34,249,128,0.6)'
+          },
+          {
+            logo: 'https://explorer.noteprotocol.org/logo.svg',
+            title: 'NOTE Explorer',
+            desc: 'Explore the NOTE protocol assets.',
+            url: 'https://explorer.noteprotocol.org',
+            id: 2,
+            time: 0,
+            tag: 'Explorer',
+            tagColor: 'rgba(249,192,34,0.8)'
+          }
+        ]
+      };
       const readTabTime = appTab.readTabTime;
       data.apps.forEach((w) => {
         const readAppTime = appTab.readAppTime[w.id];

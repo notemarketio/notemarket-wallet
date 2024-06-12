@@ -275,7 +275,7 @@ const Main = () => {
 
   const selfRef = useRef({
     settingsLoaded: false,
-    summaryLoaded: false,
+    summaryLoaded: true,
     accountLoaded: false,
     configLoaded: true
   });
