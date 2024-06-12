@@ -86,7 +86,7 @@ export class OpenApiService {
         };
       }
     };
-    getConfig();
+    // getConfig();
   };
 
   setClientAddress = async (token: string, flag: number) => {

@@ -50,7 +50,6 @@ import NetworkTypeScreen from './Settings/NetworkTypeScreen';
 import UpgradeNoticeScreen from './Settings/UpgradeNoticeScreen';
 import TestScreen from './Test/TestScreen';
 import HistoryScreen from './Wallet/HistoryScreen';
-import KeystoneSignScreen from './Wallet/KeystoneSignScreen';
 import ReceiveScreen from './Wallet/ReceiveScreen';
 import TxConfirmScreen from './Wallet/TxConfirmScreen';
 import TxCreateScreen from './Wallet/TxCreateScreen';
@@ -278,7 +277,7 @@ const Main = () => {
     settingsLoaded: false,
     summaryLoaded: false,
     accountLoaded: false,
-    configLoaded: false
+    configLoaded: true
   });
   const self = selfRef.current;
   const init = useCallback(async () => {
