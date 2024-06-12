@@ -33,9 +33,7 @@ import { amountToSatoshis, satoshisToAmount, useWallet } from '@/ui/utils';
 
 import { BuyBTCModal } from '../../BuyBTC/BuyBTCModal';
 import { useNavigate } from '../../MainRoute';
-import { AtomicalsTab } from './AtomicalsTab';
-import { OrdinalsTab } from './OrdinalsTab';
-import { RunesList } from './RunesList';
+import { N20List } from './N20List';
 
 const $noBreakStyle: CSSProperties = {
   whiteSpace: 'nowrap',
@@ -124,19 +122,9 @@ export default function WalletTabScreen() {
 
   const tabItems = [
     {
-      key: AssetTabKey.ORDINALS,
-      label: 'Ordinals',
-      children: <OrdinalsTab />
-    },
-    {
-      key: AssetTabKey.ATOMICALS,
-      label: 'Atomicals',
-      children: <AtomicalsTab />
-    },
-    {
-      key: AssetTabKey.RUNES,
-      label: 'Runes',
-      children: <RunesList />
+      key: AssetTabKey.N20,
+      label: 'N20',
+      children: <N20List />
     }
   ];
 

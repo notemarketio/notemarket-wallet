@@ -19,6 +19,7 @@ import {
   InscribeOrder,
   Inscription,
   InscriptionSummary,
+  N20Balance,
   NetworkType,
   RuneBalance,
   SignPsbtOptions,
@@ -241,6 +242,8 @@ export interface WalletController {
     currentPage: number,
     pageSize: number
   ): Promise<{ currentPage: number; pageSize: number; total: number; list: TokenBalance[] }>;
+
+  getN20List(account: AccountWithNoteInfo): Promise<N20Balance[]>;
 
   getBRC20List5Byte(
     address: string,

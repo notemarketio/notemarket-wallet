@@ -1,6 +1,10 @@
+import { concat } from 'lodash';
+
 import {
+  NoteApiService,
   contactBookService,
   keyringService,
+  noteApiService,
   notificationService,
   openapiService,
   permissionService,
@@ -31,6 +35,7 @@ import {
   AddressType,
   AddressUserToSignInput,
   BitcoinBalance,
+  N20Balance,
   NetworkType,
   PublicKeyUserToSignInput,
   SignPsbtOptions,
@@ -67,6 +72,7 @@ export type AccountAsset = {
 
 export class WalletController extends BaseController {
   openapi: OpenApiService = openapiService;
+  noteapi: NoteApiService = noteApiService;
 
   /* wallet */
   boot = (password: string) => keyringService.boot(password);
@@ -742,6 +748,7 @@ export class WalletController extends BaseController {
 
   setNetworkType = async (networkType: NetworkType) => {
     preferenceService.setNetworkType(networkType);
+    this.noteapi.switchNetwork(networkType);
     if (networkType === NetworkType.MAINNET) {
       this.openapi.setHost(OPENAPI_URL_MAINNET);
     } else {
@@ -1209,7 +1216,12 @@ export class WalletController extends BaseController {
       noteInfo: {
         address: noteInfo.address,
         script: noteInfo.script,
-        scriptHash: noteInfo.scriptHash
+        scriptHash: noteInfo.scriptHash,
+        deprecated: {
+          address: noteInfo.deprecatedAddress,
+          script: noteInfo.deprecatedScript,
+          scriptHash: noteInfo.deprecatedScriptHash
+        }
       }
     };
   };
@@ -1400,6 +1412,28 @@ export class WalletController extends BaseController {
 
   decodePsbt = (psbtHex: string, website: string) => {
     return openapiService.decodePsbt(psbtHex, website);
+  };
+
+  getN20List = async (account: AccountWithNoteInfo): Promise<N20Balance[]> => {
+    const [tokenList, deprecatedTokenList] = await Promise.all([
+      await this.noteapi.tokenList(account.noteInfo.scriptHash),
+      (async () => {
+        if (account.noteInfo.deprecated) {
+          return await this.noteapi.tokenList(account.noteInfo.deprecated.scriptHash);
+        }
+        return [];
+      })()
+    ]);
+
+    const balances = concat(tokenList, deprecatedTokenList).map((t) => ({
+      tick: t.tick,
+      decimals: t.dec,
+      confirmed: t.confirmed,
+      unconfirmed: t.unconfirmed,
+      needUpgrade: t.needUpgrade
+    }));
+
+    return balances;
   };
 
   getBRC20List = async (address: string, currentPage: number, pageSize: number) => {

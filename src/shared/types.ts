@@ -239,6 +239,12 @@ export interface AccountWithNoteInfo extends Account {
     address: string;
     script: string;
     scriptHash: string;
+
+    deprecated?: {
+      address: string;
+      script: string;
+      scriptHash: string;
+    };
   };
 }
 
@@ -269,6 +275,14 @@ export interface TokenBalance {
   transferableBalance: string;
   availableBalanceSafe: string;
   availableBalanceUnSafe: string;
+}
+
+export interface N20Balance {
+  tick: string;
+  decimals: number;
+  confirmed: string;
+  unconfirmed: string;
+  needUpgrade?: boolean;
 }
 
 export interface Arc20Balance {
