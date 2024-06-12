@@ -1,5 +1,5 @@
+import { UnspentOutput } from '@/shared/lib/walletsdk';
 import { Inscription } from '@/shared/types';
-import { UnspentOutput } from '@notemarket/wallet-sdk';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { updateVersion } from '../global/actions';

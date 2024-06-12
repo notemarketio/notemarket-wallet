@@ -2,6 +2,7 @@ import { Checkbox } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 
 import { UNCONFIRMED_HEIGHT } from '@/shared/constant';
+import { UnspentOutput } from '@/shared/lib/walletsdk';
 import { Button, Card, Column, Content, Footer, Header, Layout, Row, Text } from '@/ui/components';
 import { Loading } from '@/ui/components/ActionComponent/Loading';
 import Arc20PreviewCard from '@/ui/components/Arc20PreviewCard';
@@ -13,7 +14,6 @@ import { useSetSpendUnavailableUtxosCallback } from '@/ui/state/transactions/hoo
 import { colors } from '@/ui/theme/colors';
 import { fontSizes } from '@/ui/theme/font';
 import { satoshisToAmount, shortUtxo, useWallet } from '@/ui/utils';
-import { UnspentOutput } from '@notemarket/wallet-sdk';
 
 type UnavailableUnspentOutput = UnspentOutput & {
   height?: number;

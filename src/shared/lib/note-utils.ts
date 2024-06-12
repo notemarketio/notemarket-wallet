@@ -1,7 +1,7 @@
-import { AddressType } from '@notemarket/wallet-sdk';
-import { bitcoin } from '@notemarket/wallet-sdk/lib/bitcoin-core';
-import { toPsbtNetwork } from '@notemarket/wallet-sdk/lib/network';
-import { toXOnly } from '@notemarket/wallet-sdk/lib/utils';
+import { AddressType } from '@/shared/lib/walletsdk';
+import { bitcoin } from '@/shared/lib/walletsdk/bitcoin-core';
+import { toPsbtNetwork } from '@/shared/lib/walletsdk/network';
+import { toXOnly } from '@/shared/lib/walletsdk/utils';
 
 import { NOTEAddressType, NetworkType } from '../types';
 

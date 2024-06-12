@@ -4,6 +4,8 @@ import { ContactBookItem, ContactBookStore } from '@/background/service/contactB
 import { ToSignInput } from '@/background/service/keyring';
 import { ConnectedSite } from '@/background/service/permission';
 import { AddressFlagType } from '@/shared/constant';
+import { AddressType, UnspentOutput } from '@/shared/lib/walletsdk';
+import { bitcoin } from '@/shared/lib/walletsdk/bitcoin-core';
 import {
   Account,
   AccountWithNoteInfo,
@@ -31,8 +33,6 @@ import {
   WalletConfig,
   WalletKeyring
 } from '@/shared/types';
-import { AddressType, UnspentOutput } from '@notemarket/wallet-sdk';
-import { bitcoin } from '@notemarket/wallet-sdk/lib/bitcoin-core';
 
 export interface WalletController {
   openapi: {

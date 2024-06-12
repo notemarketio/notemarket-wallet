@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { runesUtils } from '@/shared/lib/runes-utils';
+import { getAddressUtxoDust } from '@/shared/lib/walletsdk/transaction';
 import { Inscription, RawTxInfo, RuneBalance, RuneInfo } from '@/shared/types';
 import { Button, Column, Content, Header, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
@@ -18,7 +19,6 @@ import {
 } from '@/ui/state/transactions/hooks';
 import { colors } from '@/ui/theme/colors';
 import { isValidAddress } from '@/ui/utils';
-import { getAddressUtxoDust } from '@notemarket/wallet-sdk/lib/transaction';
 
 export default function SendRunesScreen() {
   const { state } = useLocation();

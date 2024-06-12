@@ -1,4 +1,4 @@
-import { bitcoin } from '@notemarket/wallet-sdk/lib/bitcoin-core';
+import { bitcoin } from '@/shared/lib/walletsdk/bitcoin-core';
 
 import { CHAINS_ENUM } from './constant';
 

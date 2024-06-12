@@ -1324,19 +1324,18 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@ethereumjs/rlp@^4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@ethereumjs/rlp/-/rlp-4.0.1.tgz#626fabfd9081baab3d0a3074b0c7ecaf674aaa41"
-  integrity sha512-tqsQiBQDQdmPWE1xkkBq4rlSW5QZpLOUJ5RJh2/9fug+q9tnUhuZoVLk7s0scUIKTOzEtR72DFBXI4WiZcMpvw==
+"@ethereumjs/rlp@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@ethereumjs/rlp/-/rlp-5.0.2.tgz#c89bd82f2f3bec248ab2d517ae25f5bbc4aac842"
+  integrity sha512-DziebCdg4JpGlEqEdGgXmjqcFoJi+JGulUXwEjsZGAscAQ7MyD/7LE/GVCP29vEQxKc7AAwjT3A2ywHp2xfoCA==
 
-"@ethereumjs/util@^8.0.0":
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/@ethereumjs/util/-/util-8.1.0.tgz#299df97fb6b034e0577ce9f94c7d9d1004409ed4"
-  integrity sha512-zQ0IqbdX8FZ9aw11vP+dZkKDkS+kgIvQPHnSAXzP9pLu+Rfu3D3XEeLbicvoXJTYnhZiPmsZUxgdzXwNKxRPbA==
+"@ethereumjs/util@^9.0.3":
+  version "9.0.3"
+  resolved "https://registry.yarnpkg.com/@ethereumjs/util/-/util-9.0.3.tgz#c2709e6127a85bbe23a71937ac78358ac93e7241"
+  integrity sha512-PmwzWDflky+7jlZIFqiGsBPap12tk9zK5SVH9YW2OEnDN7OEhCjUOMzbOqwuClrbkSIkM2ERivd7sXZ48Rh/vg==
   dependencies:
-    "@ethereumjs/rlp" "^4.0.1"
-    ethereum-cryptography "^2.0.0"
-    micro-ftch "^0.3.1"
+    "@ethereumjs/rlp" "^5.0.2"
+    ethereum-cryptography "^2.1.3"
 
 "@fortawesome/fontawesome-common-types@6.3.0":
   version "6.3.0"
@@ -1748,13 +1747,13 @@
     bs58check "^2.1.2"
     uuid "^8.3.2"
 
-"@keystonehq/bc-ur-registry-eth@^0.15.2":
-  version "0.15.2"
-  resolved "https://registry.yarnpkg.com/@keystonehq/bc-ur-registry-eth/-/bc-ur-registry-eth-0.15.2.tgz#1491dd0c9eb7042902e53543eea3deda576b2399"
-  integrity sha512-M096p7RD4SfcU+EQOISa0eTGyr5+Ls4hKOx3pDVWu8Y3TlWZFgFE39ma+zLqKTzGjkt6Ita96dT2u2p4pZfyTA==
+"@keystonehq/bc-ur-registry-eth@^0.20.0":
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/@keystonehq/bc-ur-registry-eth/-/bc-ur-registry-eth-0.20.0.tgz#fd497e1803f77dd5b561035b7d871f6eeb14cfad"
+  integrity sha512-MS0umk+F19x4wJQ7Sj8q2IZmf1mjxeNjJb1gJIhaADr0Pq7ENZ6FUR8Mprog/tkTXWF1LP004aqlQFJA1h9zJQ==
   dependencies:
-    "@ethereumjs/util" "^8.0.0"
-    "@keystonehq/bc-ur-registry" "0.5.4"
+    "@ethereumjs/util" "^9.0.3"
+    "@keystonehq/bc-ur-registry" "^0.6.0"
     hdkey "^2.0.1"
     uuid "^8.3.2"
 
@@ -1802,12 +1801,29 @@
     bs58check "^2.1.2"
     uuid "^8.3.2"
 
+"@keystonehq/bc-ur-registry-stellar@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@keystonehq/bc-ur-registry-stellar/-/bc-ur-registry-stellar-0.0.3.tgz#fe954cbef8c3c56e700aa39d17099add026104d2"
+  integrity sha512-H2iMqboqMGeDNz09tXq1A5/hjNxnhV5psGn6e5aHfpXTdutPoro1r1iOq9yFav7mKVOtXSPGCKvmAR6+P5SPGw==
+  dependencies:
+    "@keystonehq/bc-ur-registry" "^0.5.4"
+    bs58check "^2.1.2"
+    uuid "^8.3.2"
+
 "@keystonehq/bc-ur-registry-sui@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@keystonehq/bc-ur-registry-sui/-/bc-ur-registry-sui-0.3.0.tgz#72f9b2fd167cb759f961437907fff9e034864fa4"
   integrity sha512-z2EVkY+ZOu766KsQklM3rXINXaXG2nUmTWMsmde0KO7KiAxW6TYloHXh+DdVZAGWUBQNs1lkVk/9elbDt8Bwog==
   dependencies:
     "@keystonehq/bc-ur-registry" "^0.5.5"
+    uuid "^9.0.0"
+
+"@keystonehq/bc-ur-registry-ton@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@keystonehq/bc-ur-registry-ton/-/bc-ur-registry-ton-0.1.1.tgz#a5742c96c36a27086f4555c0083aa0c429d85f65"
+  integrity sha512-e0noxUN6Qaf3ngcckc8i7uT/XBODAJHa7rURdQaEdtVZJlFd03x2VZt/wNTLAJWTH79X5RuzBDfJvlLMfF1DJA==
+  dependencies:
+    "@keystonehq/bc-ur-registry" "^0.5.4"
     uuid "^9.0.0"
 
 "@keystonehq/bc-ur-registry@0.5.4":
@@ -1837,7 +1853,7 @@
     bs58check "^2.1.2"
     tslib "^2.3.0"
 
-"@keystonehq/bc-ur-registry@^0.6.4":
+"@keystonehq/bc-ur-registry@^0.6.0", "@keystonehq/bc-ur-registry@^0.6.4":
   version "0.6.4"
   resolved "https://registry.yarnpkg.com/@keystonehq/bc-ur-registry/-/bc-ur-registry-0.6.4.tgz#9c57ff9687cafdc0d2bbd04dc36676d3a38c1485"
   integrity sha512-j8Uy44DuAkvYkbf0jMxRY3UizJfn8wsEQr7GS3miRF44vcq7k0/yemVkftbn3jQ+0JYaUXf5wY7lVpLhAeW5nQ==
@@ -1846,10 +1862,10 @@
     bs58check "^2.1.2"
     tslib "^2.3.0"
 
-"@keystonehq/keystone-sdk@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@keystonehq/keystone-sdk/-/keystone-sdk-0.3.0.tgz#0dd0b85f17b9946baa4d62a77f422a99f012d419"
-  integrity sha512-Y6e9rJUWzHuvsAiu9XxXJufSepTZFXv95pER2467hm2HmVujuVvONv2JEL5YEeTn2PIogdrvnQZNERjINdzodQ==
+"@keystonehq/keystone-sdk@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@keystonehq/keystone-sdk/-/keystone-sdk-0.6.0.tgz#dc065759499bea15a8c213d02a4572141cefd685"
+  integrity sha512-FDZfShq8VGgHI+0yRP5EkSgp4WqsWfd8FMjJwZRavw7KWZaXKM2ydOmItM3PQhjfetzrXINO9D2qdm31xmQGww==
   dependencies:
     "@bufbuild/protobuf" "^1.2.0"
     "@keystonehq/bc-ur-registry" "^0.6.4"
@@ -1858,12 +1874,14 @@
     "@keystonehq/bc-ur-registry-btc" "^0.1.0"
     "@keystonehq/bc-ur-registry-cardano" "^0.3.0"
     "@keystonehq/bc-ur-registry-cosmos" "^0.2.2"
-    "@keystonehq/bc-ur-registry-eth" "^0.15.2"
+    "@keystonehq/bc-ur-registry-eth" "^0.20.0"
     "@keystonehq/bc-ur-registry-evm" "^0.5.2"
     "@keystonehq/bc-ur-registry-keystone" "^0.1.0"
     "@keystonehq/bc-ur-registry-near" "^0.8.0"
     "@keystonehq/bc-ur-registry-sol" "^0.6.2"
+    "@keystonehq/bc-ur-registry-stellar" "^0.0.3"
     "@keystonehq/bc-ur-registry-sui" "^0.3.0"
+    "@keystonehq/bc-ur-registry-ton" "^0.1.1"
     "@ngraveio/bc-ur" "^1.1.6"
     bs58check "^3.0.1"
     pako "^2.1.0"
@@ -1946,21 +1964,6 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
-
-"@notemarket/wallet-sdk@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@notemarket/wallet-sdk/-/wallet-sdk-1.0.1.tgz#203155ec65e0a1d246c6c40676819b0684c9a222"
-  integrity sha512-GuXOF1vHslXyyUihn7KwBZdLUFytL7bAvcwOSk8sVOh5mmOY5h0rib0l+Y24EwnJxQyGTxsd6JbGMww0YGt/Ug==
-  dependencies:
-    "@bitcoinerlab/secp256k1" "^1.1.1"
-    "@keystonehq/keystone-sdk" "^0.3.0"
-    big-integer "^1.6.52"
-    bignumber.js "^9.1.2"
-    bip39 "^3.1.0"
-    bitcoinjs-lib "^6.1.6"
-    bitcore-lib "^10.0.0"
-    ecpair "^2.1.0"
-    hdkey "^2.1.0"
 
 "@notionhq/client@^1.0.4":
   version "1.0.4"
@@ -3979,7 +3982,7 @@ bignumber.js@*, bignumber.js@^9.1.1:
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.1.1.tgz#c4df7dc496bd849d4c9464344c1aa74228b4dac6"
   integrity sha512-pHm4LsMJ6lzgNGVfZHjMoO8sdoRhOzOH4MLmY65Jg70bpxCKu5iOHNJyfF6OyvYw7t8Fpf35RuzUyqnQsj8Vig==
 
-bignumber.js@^9.0.1, bignumber.js@^9.1.2:
+bignumber.js@^9.0.1:
   version "9.1.2"
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.1.2.tgz#b7c4242259c008903b13707983b5f4bbd31eda0c"
   integrity sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug==
@@ -4036,7 +4039,7 @@ bitcoinjs-lib@^6.1.6:
     typeforce "^1.11.3"
     varuint-bitcoin "^1.1.2"
 
-bitcore-lib@^10.0.0:
+bitcore-lib@^10.0.36:
   version "10.0.36"
   resolved "https://registry.yarnpkg.com/bitcore-lib/-/bitcore-lib-10.0.36.tgz#2a88c8e0e63d4fc08e870fcc2d6493b931cfd630"
   integrity sha512-yGSiEubYzabCYZ5/qu9ji5P/kfLkXpBgm1lAblVO2ESuD9ep7aaG6TRd3K5ips4pWgW/uRQpbiErT6pw2Ke/AQ==
@@ -6282,7 +6285,7 @@ ethereum-cryptography@^0.1.3:
     secp256k1 "^4.0.1"
     setimmediate "^1.0.5"
 
-ethereum-cryptography@^2.0.0:
+ethereum-cryptography@^2.1.3:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/ethereum-cryptography/-/ethereum-cryptography-2.2.0.tgz#06e2d9c0d89f98ffc6a83818f55bf85afecd50dc"
   integrity sha512-hsm9JhfytIf8QME/3B7j4bc8V+VdTU+Vas1aJlvIS96ffoNAosudXvGoEvWmc7QZYdkC8mrMJz9r0fcbw7GyCA==
@@ -9320,11 +9323,6 @@ methods@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
   integrity sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==
-
-micro-ftch@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/micro-ftch/-/micro-ftch-0.3.1.tgz#6cb83388de4c1f279a034fb0cf96dfc050853c5f"
-  integrity sha512-/0LLxhzP0tfiR5hcQebtudP56gUurs2CLkGarnCiB/OqEyUFQ6U3paQi/tgLv0hBJYt2rnr9MNpxz4fiiugstg==
 
 micromatch@^3.0.4, micromatch@^3.1.10, micromatch@^3.1.4:
   version "3.1.10"

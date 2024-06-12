@@ -27,6 +27,18 @@ import {
 } from '@/shared/constant';
 import { generateP2TRNoteInfo, toAddressType } from '@/shared/lib/note-utils';
 import { runesUtils } from '@/shared/lib/runes-utils';
+import { UnspentOutput, txHelpers } from '@/shared/lib/walletsdk';
+import { publicKeyToAddress, scriptPkToAddress } from '@/shared/lib/walletsdk/address';
+import { ECPair, bitcoin } from '@/shared/lib/walletsdk/bitcoin-core';
+import { KeystoneKeyring } from '@/shared/lib/walletsdk/keyring';
+import {
+  genPsbtOfBIP322Simple,
+  getSignatureFromPsbtOfBIP322Simple,
+  signMessageOfBIP322Simple
+} from '@/shared/lib/walletsdk/message';
+import { toPsbtNetwork } from '@/shared/lib/walletsdk/network';
+import { getAddressUtxoDust } from '@/shared/lib/walletsdk/transaction';
+import { toXOnly } from '@/shared/lib/walletsdk/utils';
 import {
   Account,
   AccountWithNoteInfo,
@@ -43,18 +55,6 @@ import {
   WalletKeyring
 } from '@/shared/types';
 import { checkAddressFlag, fromUnitInteger } from '@/shared/utils';
-import { UnspentOutput, txHelpers } from '@notemarket/wallet-sdk';
-import { publicKeyToAddress, scriptPkToAddress } from '@notemarket/wallet-sdk/lib/address';
-import { ECPair, bitcoin } from '@notemarket/wallet-sdk/lib/bitcoin-core';
-import { KeystoneKeyring } from '@notemarket/wallet-sdk/lib/keyring';
-import {
-  genPsbtOfBIP322Simple,
-  getSignatureFromPsbtOfBIP322Simple,
-  signMessageOfBIP322Simple
-} from '@notemarket/wallet-sdk/lib/message';
-import { toPsbtNetwork } from '@notemarket/wallet-sdk/lib/network';
-import { getAddressUtxoDust } from '@notemarket/wallet-sdk/lib/transaction';
-import { toXOnly } from '@notemarket/wallet-sdk/lib/utils';
 
 import { ContactBookItem } from '../service/contactBook';
 import { OpenApiService } from '../service/openapi';
