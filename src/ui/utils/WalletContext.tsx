@@ -59,6 +59,11 @@ export interface WalletController {
   isReady(): Promise<boolean>;
 
   getAddressBalance(address: string): Promise<BitcoinBalance>;
+  batchGetAddressBalances(addresses: string[]): Promise<
+    (BitcoinBalance & {
+      address: string;
+    })[]
+  >;
   getAddressCacheBalance(address: string): Promise<BitcoinBalance>;
   getMultiAddressAssets(addresses: string): Promise<AddressSummary[]>;
   findGroupAssets(

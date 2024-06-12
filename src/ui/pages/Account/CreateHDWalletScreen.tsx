@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 
 import { ADDRESS_TYPES, OW_HD_PATH, RESTORE_WALLETS } from '@/shared/constant';
 import { AddressType, RestoreWalletType } from '@/shared/types';
+import { toUnitInteger } from '@/shared/utils';
 import { Button, Card, Column, Content, Grid, Header, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { AddressTypeCard2 } from '@/ui/components/AddressTypeCard';
@@ -15,7 +16,7 @@ import { Icon } from '@/ui/components/Icon';
 import { TabBar } from '@/ui/components/TabBar';
 import { useCreateAccountCallback } from '@/ui/state/global/hooks';
 import { fontSizes } from '@/ui/theme/font';
-import { copyToClipboard, satoshisToAmount, useWallet } from '@/ui/utils';
+import { copyToClipboard, useWallet } from '@/ui/utils';
 import { LoadingOutlined } from '@ant-design/icons';
 
 import { useNavigate } from '../MainRoute';
@@ -146,13 +147,7 @@ function Step1_Import({
   const [disabled, setDisabled] = useState(true);
 
   const wordsItems = useMemo(() => {
-    if (contextData.restoreWalletType === RestoreWalletType.OW) {
-      return [WORDS_12_ITEM];
-    } else if (contextData.restoreWalletType === RestoreWalletType.XVERSE) {
-      return [WORDS_12_ITEM];
-    } else {
-      return [WORDS_12_ITEM, WORDS_24_ITEM];
-    }
+    return [WORDS_12_ITEM];
   }, [contextData]);
 
   const [keys, setKeys] = useState<Array<string>>(new Array(wordsItems[contextData.wordsType].count).fill(''));
@@ -430,7 +425,7 @@ function Step2({
     if (!addresses[0]) return;
 
     setLoading(true);
-    const balances = await wallet.getMultiAddressAssets(addresses.join(','));
+    const balances = await wallet.batchGetAddressBalances(addresses);
     setLoading(false);
 
     const addressAssets: { [key: string]: { total_btc: string; satoshis: number; total_inscription: number } } = {};
@@ -439,11 +434,13 @@ function Step2({
     for (let i = 0; i < addresses.length; i++) {
       const address = addresses[i];
       const balance = balances[i];
-      const satoshis = balance.totalSatoshis;
+      const total_btc = balance.btc_amount;
+
+      const satoshis = Number(toUnitInteger(total_btc, 8));
       addressAssets[address] = {
-        total_btc: satoshisToAmount(balance.totalSatoshis),
+        total_btc,
         satoshis,
-        total_inscription: balance.inscriptionCount
+        total_inscription: 0
       };
       if (satoshis > maxSatoshis) {
         maxSatoshis = satoshis;
@@ -637,19 +634,6 @@ function Step2({
             />
           );
         })}
-
-      <Text text="Custom HdPath (Optional)" preset="bold" mt="lg" />
-
-      <Column>
-        <Input
-          placeholder={'Custom HD Wallet Derivation Path'}
-          value={pathText}
-          onChange={(e) => {
-            submitCustomHdPath(e.target.value);
-          }}
-        />
-      </Column>
-      {pathError && <Text text={pathError} color="error" />}
       {error && <Text text={error} color="error" />}
 
       <Text text="Phrase (Optional)" preset="bold" mt="lg" />
@@ -745,7 +729,7 @@ export default function CreateHDWalletScreen() {
     addressType: AddressType.P2WPKH,
     step1Completed: false,
     tabType: TabType.STEP1,
-    restoreWalletType: RestoreWalletType.UNISAT,
+    restoreWalletType: RestoreWalletType.NOTE,
     isRestore: isImport,
     isCustom: false,
     customHdPath: '',

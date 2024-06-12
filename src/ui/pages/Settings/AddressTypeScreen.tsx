@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { ADDRESS_TYPES, KEYRING_TYPE } from '@/shared/constant';
+import { toUnitInteger } from '@/shared/utils';
 import { Column, Content, Header, Layout } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { AddressTypeCard } from '@/ui/components/AddressTypeCard';
@@ -8,7 +9,7 @@ import { useExtensionIsInTab } from '@/ui/features/browser/tabs';
 import { useCurrentAccount, useReloadAccounts } from '@/ui/state/accounts/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
-import { satoshisToAmount, useWallet } from '@/ui/utils';
+import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
 
@@ -40,15 +41,16 @@ export default function AddressTypeScreen() {
 
     const _res = await wallet.getAllAddresses(currentKeyring, account.index || 0);
     setAddresses(_res);
-    const balances = await wallet.getMultiAddressAssets(_res.join(','));
+    const balances = await wallet.batchGetAddressBalances(_res);
     for (let i = 0; i < _res.length; i++) {
       const address = _res[i];
       const balance = balances[i];
-      const satoshis = balance.totalSatoshis;
+      const total_btc = balance.btc_amount;
+      const satoshis = Number(toUnitInteger(total_btc, 8));
       self.addressAssets[address] = {
-        total_btc: satoshisToAmount(balance.totalSatoshis),
+        total_btc,
         satoshis,
-        total_inscription: balance.inscriptionCount
+        total_inscription: 0
       };
     }
     setAddressAssets(self.addressAssets);

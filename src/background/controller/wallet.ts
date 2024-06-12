@@ -162,6 +162,25 @@ export class WalletController extends BaseController {
     return balance;
   };
 
+  batchGetAddressBalances = async (
+    addresses: string[]
+  ): Promise<
+    (BitcoinBalance & {
+      address: string;
+    })[]
+  > => {
+    const balances = await Promise.all(
+      addresses.map(async (address) => {
+        const balance = await this.getAddressBalance(address);
+        return {
+          address,
+          ...balance
+        };
+      })
+    );
+    return balances;
+  };
+
   getMultiAddressAssets = async (addresses: string) => {
     return openapiService.getMultiAddressAssets(addresses);
   };
@@ -1795,7 +1814,7 @@ export class WalletController extends BaseController {
   }
 
   getShowSafeNotice = () => {
-    return preferenceService.getShowSafeNotice();
+    return false;
   };
 
   setShowSafeNotice = (show: boolean) => {
