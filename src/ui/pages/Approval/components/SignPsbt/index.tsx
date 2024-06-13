@@ -781,8 +781,9 @@ export default function SignPsbt({
                                 <Row>
                                   <AddressText address={v.address} color={isToSign ? 'white' : 'textDim'} />
                                   {isToSign && (
-                                    <Row style={{ borderWidth: 1, borderColor: 'gold', borderRadius: 5, padding: 2 }}>
-                                      <Text text="to sign" color="gold" size="xs" />
+                                    <Row
+                                      style={{ borderWidth: 1, borderColor: '#5DACBD', borderRadius: 5, padding: 2 }}>
+                                      <Text text="to sign" color="gold" size="xxs" />
                                     </Row>
                                   )}
                                 </Row>

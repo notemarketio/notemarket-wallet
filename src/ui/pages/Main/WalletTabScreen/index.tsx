@@ -250,15 +250,6 @@ export default function WalletTabScreen() {
               }}
               full
             />
-            <Button
-              text="Buy"
-              preset="default"
-              icon="bitcoin"
-              onClick={(e) => {
-                setBuyBtcModalVisible(true);
-              }}
-              full
-            />
           </Row>
 
           <Tabs
