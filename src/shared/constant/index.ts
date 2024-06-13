@@ -120,6 +120,7 @@ export const ADDRESS_TYPES: {
   hdPath: string;
   displayIndex: number;
   isUnisatLegacy?: boolean;
+  isTestnetOnly?: boolean;
 }[] = [
   {
     value: AddressType.P2PKH,
@@ -162,6 +163,15 @@ export const ADDRESS_TYPES: {
     isUnisatLegacy: false
   },
   {
+    value: AddressType.M44_P2WPKH,
+    label: 'P2WPKH',
+    name: 'Native SegWit (P2WPKH)',
+    hdPath: "m/44'/1'/0'/0",
+    displayIndex: 1,
+    isUnisatLegacy: false,
+    isTestnetOnly: true
+  },
+  {
     value: AddressType.M44_P2TR,
     label: 'P2TR',
     name: 'Taproot (P2TR)',
@@ -183,7 +193,7 @@ export const RESTORE_WALLETS: { value: RestoreWalletType; name: string; addressT
 
 export const NETWORK_TYPES = [
   { value: NetworkType.MAINNET, label: 'LIVENET', name: 'livenet', validNames: [0, 'livenet', 'mainnet'] },
-  { value: NetworkType.TESTNET, label: 'TESTNET', name: 'testnet', validNames: ['testnet'] }
+  { value: NetworkType.TESTNET, label: 'TESTNET4', name: 'testnet', validNames: ['testnet'] }
 ];
 
 export const MINIMUM_GAS_LIMIT = 21000;

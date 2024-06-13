@@ -46,6 +46,7 @@ import {
   AddressUserToSignInput,
   AppSummary,
   BitcoinBalance,
+  FeeSummary,
   N20Balance,
   NetworkType,
   PublicKeyUserToSignInput,
@@ -59,6 +60,7 @@ import { checkAddressFlag, fromUnitInteger } from '@/shared/utils';
 import { ContactBookItem } from '../service/contactBook';
 import { OpenApiService } from '../service/openapi';
 import { ConnectedSite } from '../service/permission';
+import { MempoolApi } from '../utils/mempool';
 import BaseController from './base';
 
 const stashKeyrings: Record<string, Keyring> = {};
@@ -1453,8 +1455,30 @@ export class WalletController extends BaseController {
     return account;
   };
 
-  getFeeSummary = async () => {
-    return openapiService.getFeeSummary();
+  getFeeSummary = async (): Promise<FeeSummary> => {
+    const networkType = this.getNetworkType();
+    const mempoolApi = new MempoolApi(networkType);
+    const fees = await mempoolApi.getRecommendedFees();
+
+    return {
+      list: [
+        {
+          title: 'Economy',
+          desc: 'Abount 1 hour',
+          feeRate: fees.hourFee
+        },
+        {
+          title: 'Normal',
+          desc: 'About 30 minutes',
+          feeRate: fees.halfHourFee
+        },
+        {
+          title: 'Fastest',
+          desc: 'About 10 minutes',
+          feeRate: fees.fastestFee
+        }
+      ]
+    };
   };
 
   inscribeBRC20Transfer = (address: string, tick: string, amount: string, feeRate: number, outputValue: number) => {

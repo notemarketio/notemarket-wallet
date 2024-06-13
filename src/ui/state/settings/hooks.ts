@@ -70,7 +70,7 @@ export function useBlockstreamUrl() {
   if (networkType === NetworkType.MAINNET) {
     return 'https://mempool.space';
   } else {
-    return 'https://mempool.space/testnet';
+    return 'https://mempool.space/testnet4';
   }
 }
 

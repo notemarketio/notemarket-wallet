@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { ADDRESS_TYPES, OW_HD_PATH, RESTORE_WALLETS } from '@/shared/constant';
-import { AddressType, RestoreWalletType } from '@/shared/types';
+import { AddressType, NetworkType, RestoreWalletType } from '@/shared/types';
 import { toUnitInteger } from '@/shared/utils';
 import { Button, Card, Column, Content, Grid, Header, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
@@ -15,6 +15,7 @@ import { FooterButtonContainer } from '@/ui/components/FooterButtonContainer';
 import { Icon } from '@/ui/components/Icon';
 import { TabBar } from '@/ui/components/TabBar';
 import { useCreateAccountCallback } from '@/ui/state/global/hooks';
+import { useNetworkType } from '@/ui/state/settings/hooks';
 import { fontSizes } from '@/ui/theme/font';
 import { copyToClipboard, useWallet } from '@/ui/utils';
 import { LoadingOutlined } from '@ant-design/icons';
@@ -208,7 +209,7 @@ function Step1_Import({
         await createAccount(mnemonics, OW_HD_PATH, '', AddressType.P2TR, 1);
         navigate('MainScreen');
       } else {
-        updateContextData({ mnemonics, tabType: TabType.STEP3 });
+        updateContextData({ mnemonics, tabType: TabType.STEP2 });
       }
     } catch (e) {
       tools.toastError((e as any).message);
@@ -307,6 +308,7 @@ function Step2({
 }) {
   const wallet = useWallet();
   const tools = useTools();
+  const networkType = useNetworkType();
 
   const hdPathOptions = useMemo(() => {
     const restoreWallet = RESTORE_WALLETS[contextData.restoreWalletType];
@@ -323,6 +325,10 @@ function Step2({
       }
 
       if (contextData.customHdPath && v.isUnisatLegacy) {
+        return false;
+      }
+
+      if (networkType !== NetworkType.TESTNET && v.isTestnetOnly) {
         return false;
       }
 
@@ -764,16 +770,11 @@ export default function CreateHDWalletScreen() {
           {
             key: TabType.STEP1,
             label: 'Step 1',
-            children: <Step0 contextData={contextData} updateContextData={updateContextData} />
+            children: <Step1_Import contextData={contextData} updateContextData={updateContextData} />
           },
           {
             key: TabType.STEP2,
             label: 'Step 2',
-            children: <Step1_Import contextData={contextData} updateContextData={updateContextData} />
-          },
-          {
-            key: TabType.STEP3,
-            label: 'Step 3',
             children: <Step2 contextData={contextData} updateContextData={updateContextData} />
           }
         ];
