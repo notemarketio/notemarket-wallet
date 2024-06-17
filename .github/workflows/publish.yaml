@@ -21,4 +21,4 @@ jobs:
           client_secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           refresh_token: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
           extension_id: 'fljjndncpakifcmpkcbcjnlhaielmomn'
-          zip_file: notemarket-wallet-chrome-mv3-${{ github.event.release.tag_name }}
+          zip_file: dist/notemarket-wallet-chrome-mv3-${{ github.event.release.tag_name }}.zip
