@@ -68,7 +68,10 @@ export const colors = Object.assign({}, palette, {
   brc20_deploy: '#233933',
   brc20_transfer: '#375e4d',
   brc20_transfer_selected: '#41B530',
-  brc20_other: '#3e3e3e'
+  brc20_other: '#3e3e3e',
+
+  n20_utxo: '#24527A',
+  n20_utxo_selected: '#1d4262'
 });
 
 export type ColorTypes = keyof typeof colors;

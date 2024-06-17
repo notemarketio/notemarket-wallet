@@ -48,6 +48,7 @@ import {
   BitcoinBalance,
   FeeSummary,
   N20Balance,
+  N20UTXO,
   NetworkType,
   PublicKeyUserToSignInput,
   SignPsbtOptions,
@@ -1513,6 +1514,16 @@ export class WalletController extends BaseController {
     }));
 
     return balances;
+  };
+
+  getN20UTXOs = async (account: AccountWithNoteInfo, tick: string): Promise<N20UTXO[]> => {
+    const utxos = await this.noteapi.tokenUTXOs(tick, [account.noteInfo.scriptHash]);
+    return utxos.map((u) => ({
+      txid: u.txId,
+      vout: u.outputIndex,
+      value: u.satoshis,
+      amount: u.amount
+    }));
   };
 
   getBRC20List = async (address: string, currentPage: number, pageSize: number) => {

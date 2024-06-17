@@ -83,6 +83,10 @@ export function useNOTEExplorerUrl() {
   }
 }
 
+export function useNOTEMarketUrl() {
+  return 'https://alpha.notemarket.io';
+}
+
 export function useTxIdUrl(txid: string) {
   const networkType = useNetworkType();
   if (networkType === NetworkType.MAINNET) {
