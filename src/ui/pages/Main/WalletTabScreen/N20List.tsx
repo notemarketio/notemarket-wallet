@@ -6,6 +6,7 @@ import { useTools } from '@/ui/components/ActionComponent';
 import { Empty } from '@/ui/components/Empty';
 import { N20BalanceCard } from '@/ui/components/N20BalanceCard';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useNOTEMarketUrl } from '@/ui/state/settings/hooks';
 import { useWallet } from '@/ui/utils';
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -18,6 +19,8 @@ export function N20List() {
 
   const [fetching, setFetching] = useState<boolean>(false);
   const [tokens, setTokens] = useState<N20Balance[]>([]);
+
+  const notemarketUrl = useNOTEMarketUrl();
 
   const tools = useTools();
   const fetchData = async () => {
@@ -56,7 +59,17 @@ export function N20List() {
     <Column>
       <Row style={{ flexWrap: 'wrap' }} gap="sm">
         {tokens.map((t, index) => (
-          <N20BalanceCard balance={t} key={index} />
+          <N20BalanceCard
+            balance={t}
+            key={index}
+            onClick={() => {
+              if (t.needUpgrade) {
+                window.open(`${notemarketUrl}/wallet?tick=${t.tick}&action=upgrade`);
+              } else {
+                navigate('N20TokenScreen', { balance: t, tick: t.tick });
+              }
+            }}
+          />
         ))}
       </Row>
     </Column>

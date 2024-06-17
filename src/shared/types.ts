@@ -282,6 +282,13 @@ export interface N20Balance {
   needUpgrade?: boolean;
 }
 
+export interface N20UTXO {
+  txid: string;
+  vout: number;
+  value: number;
+  amount: string;
+}
+
 export interface Arc20Balance {
   ticker: string;
   balance: number;

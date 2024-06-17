@@ -4,6 +4,7 @@ NOTE Market Wallet - the first open-source browser extension wallet for NOTE pro
 
 - Website: https://notemarket.io/download-wallet
 - Twitter: https://twitter.com/notemarketio
+- Chrome Web Store: https://chromewebstore.google.com/detail/note-market-wallet/fljjndncpakifcmpkcbcjnlhaielmomn
 
 ## How to build
 

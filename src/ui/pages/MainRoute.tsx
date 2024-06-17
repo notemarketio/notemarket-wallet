@@ -33,6 +33,7 @@ import DiscoverTabScreen from './Main/DiscoverTabScreen';
 import SettingsTabScreen from './Main/SettingsTabScreen';
 import WalletTabScreen from './Main/WalletTabScreen';
 import WelcomeScreen from './Main/WelcomeScreen';
+import N20TokenScreen from './N20/N20TokenScreen';
 import OrdinalsInscriptionScreen from './Ordinals/OrdinalsInscriptionScreen';
 import SendOrdinalsInscriptionScreen from './Ordinals/SendOrdinalsInscriptionScreen';
 import SignOrdinalsTransactionScreen from './Ordinals/SignOrdinalsTransactionScreen';
@@ -230,6 +231,10 @@ const routes = {
   BRC20TokenScreen: {
     path: '/brc20/token',
     element: <BRC20TokenScreen />
+  },
+  N20TokenScreen: {
+    path: '/n20/token',
+    element: <N20TokenScreen />
   },
   TestScreen: {
     path: '/test',
