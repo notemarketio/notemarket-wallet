@@ -68,7 +68,7 @@ export function MyItem({ keyring, autoNav }: MyItemProps, ref) {
           if (currentKeyring.key !== keyring.key) {
             await wallet.changeKeyring(keyring);
             dispatch(keyringsActions.setCurrent(keyring));
-            const _currentAccount = await wallet.getCurrentAccount();
+            const _currentAccount = await wallet.getCurrentNoteAccount();
             dispatch(accountActions.setCurrent(_currentAccount));
           }
           if (autoNav) navigate('MainScreen');
@@ -226,8 +226,8 @@ export default function SwitchKeyringScreen() {
           style={{
             boxSizing: 'border-box'
           }}
-        // onSkipRender={onAppear}
-        // onItemRemove={onAppear}
+          // onSkipRender={onAppear}
+          // onItemRemove={onAppear}
         >
           {(item, index) => <ForwardMyItem keyring={item.keyring} autoNav={true} />}
         </VirtualList>

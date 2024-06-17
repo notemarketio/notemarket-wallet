@@ -11,7 +11,7 @@ import { fontSizes } from '@/ui/theme/font';
 import { useWallet } from '@/ui/utils';
 import { CloseOutlined } from '@ant-design/icons';
 
-const disclaimStr = `Please note that you are about to buy Bitcoin through a third-party platform. Credit card payment services are provided by our partners. UniSat Wallet acts solely as an intermediary platform and assumes no liability for any potential losses or damages that may arise from using the credit card payment service.
+const disclaimStr = `Please note that you are about to buy Bitcoin through a third-party platform. Credit card payment services are provided by our partners. NOTE Market Wallet acts solely as an intermediary platform and assumes no liability for any potential losses or damages that may arise from using the credit card payment service.
 
 `;
 export default function DisclaimerModal({ channelType, onClose }: { channelType: PaymentChannelType; onClose: any }) {

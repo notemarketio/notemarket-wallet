@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { ADDRESS_TYPES, DISCORD_URL, GITHUB_URL, KEYRING_TYPE, NETWORK_TYPES, TWITTER_URL } from '@/shared/constant';
+import { ADDRESS_TYPES, GITHUB_URL, KEYRING_TYPE, NETWORK_TYPES, TWITTER_URL } from '@/shared/constant';
 import { Card, Column, Content, Footer, Header, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { Button } from '@/ui/components/Button';
@@ -223,15 +223,6 @@ export default function SettingsTabScreen() {
           </div>
           <Row justifyCenter gap="xl" mt="lg">
             <Icon
-              icon="discord"
-              size={fontSizes.iconMiddle}
-              color="textDim"
-              onClick={() => {
-                window.open(DISCORD_URL);
-              }}
-            />
-
-            <Icon
               icon="twitter"
               size={fontSizes.iconMiddle}
               color="textDim"
@@ -250,17 +241,6 @@ export default function SettingsTabScreen() {
             />
           </Row>
           <Text text={`Version: ${versionInfo.currentVesion}`} preset="sub" textCenter />
-          {versionInfo.latestVersion && (
-            <Text
-              text={`Latest Version: ${versionInfo.latestVersion}`}
-              preset="link"
-              color="red"
-              textCenter
-              onClick={() => {
-                window.open('https://unisat.io/extension/update');
-              }}
-            />
-          )}
         </Column>
       </Content>
       <Footer px="zero" py="zero">

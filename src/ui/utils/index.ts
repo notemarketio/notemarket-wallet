@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 export * from './WalletContext';
 export * from './hooks';
+
 const UI_TYPE = {
   Tab: 'index',
   Pop: 'popup',

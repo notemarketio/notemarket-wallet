@@ -1,6 +1,10 @@
+import { concat } from 'lodash';
+
 import {
+  NoteApiService,
   contactBookService,
   keyringService,
+  noteApiService,
   notificationService,
   openapiService,
   permissionService,
@@ -14,8 +18,6 @@ import {
   AddressFlagType,
   BRAND_ALIAN_TYPE_TEXT,
   CHAINS_ENUM,
-  COIN_NAME,
-  COIN_SYMBOL,
   KEYRING_TYPE,
   KEYRING_TYPES,
   NETWORK_TYPES,
@@ -23,12 +25,29 @@ import {
   OPENAPI_URL_TESTNET,
   UNCONFIRMED_HEIGHT
 } from '@/shared/constant';
+import { generateP2TRNoteInfo, toAddressType } from '@/shared/lib/note-utils';
 import { runesUtils } from '@/shared/lib/runes-utils';
+import { UnspentOutput, txHelpers } from '@/shared/lib/walletsdk';
+import { publicKeyToAddress, scriptPkToAddress } from '@/shared/lib/walletsdk/address';
+import { ECPair, bitcoin } from '@/shared/lib/walletsdk/bitcoin-core';
+import { KeystoneKeyring } from '@/shared/lib/walletsdk/keyring';
+import {
+  genPsbtOfBIP322Simple,
+  getSignatureFromPsbtOfBIP322Simple,
+  signMessageOfBIP322Simple
+} from '@/shared/lib/walletsdk/message';
+import { toPsbtNetwork } from '@/shared/lib/walletsdk/network';
+import { getAddressUtxoDust } from '@/shared/lib/walletsdk/transaction';
+import { toXOnly } from '@/shared/lib/walletsdk/utils';
 import {
   Account,
+  AccountWithNoteInfo,
   AddressType,
   AddressUserToSignInput,
+  AppSummary,
   BitcoinBalance,
+  FeeSummary,
+  N20Balance,
   NetworkType,
   PublicKeyUserToSignInput,
   SignPsbtOptions,
@@ -36,23 +55,12 @@ import {
   UTXO,
   WalletKeyring
 } from '@/shared/types';
-import { checkAddressFlag } from '@/shared/utils';
-import { UnspentOutput, txHelpers } from '@unisat/wallet-sdk';
-import { publicKeyToAddress, scriptPkToAddress } from '@unisat/wallet-sdk/lib/address';
-import { ECPair, bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
-import { KeystoneKeyring } from '@unisat/wallet-sdk/lib/keyring';
-import {
-  genPsbtOfBIP322Simple,
-  getSignatureFromPsbtOfBIP322Simple,
-  signMessageOfBIP322Simple
-} from '@unisat/wallet-sdk/lib/message';
-import { toPsbtNetwork } from '@unisat/wallet-sdk/lib/network';
-import { getAddressUtxoDust } from '@unisat/wallet-sdk/lib/transaction';
-import { toXOnly } from '@unisat/wallet-sdk/lib/utils';
+import { checkAddressFlag, fromUnitInteger } from '@/shared/utils';
 
 import { ContactBookItem } from '../service/contactBook';
 import { OpenApiService } from '../service/openapi';
 import { ConnectedSite } from '../service/permission';
+import { MempoolApi } from '../utils/mempool';
 import BaseController from './base';
 
 const stashKeyrings: Record<string, Keyring> = {};
@@ -65,6 +73,7 @@ export type AccountAsset = {
 
 export class WalletController extends BaseController {
   openapi: OpenApiService = openapiService;
+  noteapi: NoteApiService = noteApiService;
 
   /* wallet */
   boot = (password: string) => keyringService.boot(password);
@@ -129,10 +138,49 @@ export class WalletController extends BaseController {
     preferenceService.setPopupOpen(isOpen);
   };
 
-  getAddressBalance = async (address: string) => {
-    const data = await openapiService.getAddressBalance(address);
-    preferenceService.updateAddressBalance(address, data);
-    return data;
+  getAddressBalance = async (address: string): Promise<BitcoinBalance> => {
+    const networkType = this.getNetworkType();
+
+    const script = bitcoin.address.toOutputScript(address, toPsbtNetwork(networkType));
+
+    const scriptHash = bitcoin.crypto.sha256(script).reverse().toString('hex');
+
+    const data = await this.noteapi.balance(scriptHash);
+
+    const amount = BigInt(data.confirmed) + BigInt(data.unconfirmed);
+    const btcAmount = fromUnitInteger(amount.toString(), 8).toString();
+    const confirmBTCAmount = fromUnitInteger(data.confirmed, 8).toString();
+    const pendingBTCAmount = fromUnitInteger(data.unconfirmed, 8).toString();
+
+    const balance: BitcoinBalance = {
+      amount: btcAmount,
+      confirm_amount: confirmBTCAmount,
+      pending_amount: confirmBTCAmount,
+      confirm_btc_amount: confirmBTCAmount,
+      pending_btc_amount: pendingBTCAmount,
+      btc_amount: btcAmount
+    };
+    preferenceService.updateAddressBalance(address, balance);
+    return balance;
+  };
+
+  batchGetAddressBalances = async (
+    addresses: string[]
+  ): Promise<
+    (BitcoinBalance & {
+      address: string;
+    })[]
+  > => {
+    const balances = await Promise.all(
+      addresses.map(async (address) => {
+        const balance = await this.getAddressBalance(address);
+        return {
+          address,
+          ...balance
+        };
+      })
+    );
+    return balances;
   };
 
   getMultiAddressAssets = async (addresses: string) => {
@@ -148,13 +196,9 @@ export class WalletController extends BaseController {
       confirm_amount: '0',
       pending_amount: '0',
       amount: '0',
-      usd_value: '0',
       confirm_btc_amount: '0',
       pending_btc_amount: '0',
-      btc_amount: '0',
-      confirm_inscription_amount: '0',
-      pending_inscription_amount: '0',
-      inscription_amount: '0'
+      btc_amount: '0'
     };
     if (!address) return defaultBalance;
     return preferenceService.getAddressBalance(address) || defaultBalance;
@@ -401,7 +445,9 @@ export class WalletController extends BaseController {
 
   changeKeyring = (keyring: WalletKeyring, accountIndex = 0) => {
     preferenceService.setCurrentKeyringIndex(keyring.index);
-    preferenceService.setCurrentAccount(keyring.accounts[accountIndex]);
+
+    const account = this.fillNoteAccount(keyring.accounts[accountIndex]);
+    preferenceService.setCurrentAccount(account);
     const flag = preferenceService.getAddressFlag(keyring.accounts[accountIndex].address);
     openapiService.setClientAddress(keyring.accounts[accountIndex].address, flag);
   };
@@ -721,14 +767,6 @@ export class WalletController extends BaseController {
     return preferenceService.updateIsFirstOpen();
   };
 
-  listChainAssets = async (pubkeyAddress: string) => {
-    const balance = await openapiService.getAddressBalance(pubkeyAddress);
-    const assets: AccountAsset[] = [
-      { name: COIN_NAME, symbol: COIN_SYMBOL, amount: balance.amount, value: balance.usd_value }
-    ];
-    return assets;
-  };
-
   reportErrors = (error: string) => {
     console.error('report not implemented');
   };
@@ -740,6 +778,7 @@ export class WalletController extends BaseController {
 
   setNetworkType = async (networkType: NetworkType) => {
     preferenceService.setNetworkType(networkType);
+    this.noteapi.switchNetwork(networkType);
     if (networkType === NetworkType.MAINNET) {
       this.openapi.setHost(OPENAPI_URL_MAINNET);
     } else {
@@ -761,12 +800,16 @@ export class WalletController extends BaseController {
     return NETWORK_TYPES[networkType].name;
   };
 
-  getBTCUtxos = async () => {
+  getBTCUtxos = async (): Promise<UnspentOutput[]> => {
     // getBTCAccount
     const account = preferenceService.getCurrentAccount();
     if (!account) throw new Error('no current account');
 
-    let utxos = await openapiService.getBTCUtxos(account.address);
+    const networkType = this.getNetworkType();
+    const script = bitcoin.address.toOutputScript(account.address, toPsbtNetwork(networkType));
+    const scriptHash = bitcoin.crypto.sha256(script).reverse().toString('hex');
+
+    let utxos = await this.noteapi.utxos(scriptHash);
 
     if (checkAddressFlag(openapiService.addressFlag, AddressFlagType.CONFIRMED_UTXO_MODE)) {
       utxos = utxos.filter((v) => (v as any).height !== UNCONFIRMED_HEIGHT);
@@ -774,14 +817,14 @@ export class WalletController extends BaseController {
 
     const btcUtxos = utxos.map((v) => {
       return {
-        txid: v.txid,
-        vout: v.vout,
+        txid: v.txId,
+        vout: v.outputIndex,
         satoshis: v.satoshis,
-        scriptPk: v.scriptPk,
-        addressType: v.addressType,
+        scriptPk: script.toString('hex'),
+        addressType: toAddressType(v.type),
         pubkey: account.pubkey,
-        inscriptions: v.inscriptions,
-        atomicals: v.atomicals
+        inscriptions: [],
+        atomicals: []
       };
     });
     return btcUtxos;
@@ -1199,6 +1242,35 @@ export class WalletController extends BaseController {
     return currentAccount;
   };
 
+  fillNoteAccount = (account: Account): AccountWithNoteInfo => {
+    const networkType = this.getNetworkType();
+    const noteInfo = generateP2TRNoteInfo(Buffer.from(account.pubkey, 'hex'), networkType);
+    return {
+      ...account,
+      noteInfo: {
+        address: noteInfo.address,
+        script: noteInfo.script,
+        scriptHash: noteInfo.scriptHash,
+        deprecated: {
+          address: noteInfo.deprecatedAddress,
+          script: noteInfo.deprecatedScript,
+          scriptHash: noteInfo.deprecatedScriptHash
+        }
+      }
+    };
+  };
+
+  getCurrentNoteAccount = async (): Promise<AccountWithNoteInfo | null> => {
+    const currentAccount = await this.getCurrentAccount();
+    if (!currentAccount) return null;
+    return this.fillNoteAccount(currentAccount);
+  };
+
+  getNoteAccounts = async (): Promise<AccountWithNoteInfo[]> => {
+    const accounts = await this.getAccounts();
+    return accounts.map(this.fillNoteAccount);
+  };
+
   getEditingKeyring = async () => {
     const editingKeyringIndex = preferenceService.getEditingKeyringIndex();
     const displayedKeyrings = await keyringService.getAllDisplayedKeyrings();
@@ -1232,7 +1304,30 @@ export class WalletController extends BaseController {
   getAppSummary = async () => {
     const appTab = preferenceService.getAppTab();
     try {
-      const data = await openapiService.getAppSummary();
+      const data: AppSummary = {
+        apps: [
+          {
+            logo: 'https://alpha.notemarket.io/logo.png',
+            title: 'NOTE Market',
+            desc: 'Trade NOTE protocol assets on the Bitcoin network.',
+            url: 'https://notemarket.io',
+            id: 1,
+            time: 0,
+            tag: 'Marketplace',
+            tagColor: 'rgba(34,249,128,0.6)'
+          },
+          {
+            logo: 'https://explorer.noteprotocol.org/logo.svg',
+            title: 'NOTE Explorer',
+            desc: 'Explore the NOTE protocol assets.',
+            url: 'https://explorer.noteprotocol.org',
+            id: 2,
+            time: 0,
+            tag: 'Explorer',
+            tagColor: 'rgba(249,192,34,0.8)'
+          }
+        ]
+      };
       const readTabTime = appTab.readTabTime;
       data.apps.forEach((w) => {
         const readAppTime = appTab.readAppTime[w.id];
@@ -1349,19 +1444,41 @@ export class WalletController extends BaseController {
     return account;
   };
 
-  addAddressFlag = (account: Account, flag: AddressFlagType) => {
+  addAddressFlag = <T extends Account | AccountWithNoteInfo>(account: T, flag: AddressFlagType): T => {
     account.flag = preferenceService.addAddressFlag(account.address, flag);
     openapiService.setClientAddress(account.address, account.flag);
     return account;
   };
-  removeAddressFlag = (account: Account, flag: AddressFlagType) => {
+  removeAddressFlag = <T extends Account | AccountWithNoteInfo>(account: T, flag: AddressFlagType): T => {
     account.flag = preferenceService.removeAddressFlag(account.address, flag);
     openapiService.setClientAddress(account.address, account.flag);
     return account;
   };
 
-  getFeeSummary = async () => {
-    return openapiService.getFeeSummary();
+  getFeeSummary = async (): Promise<FeeSummary> => {
+    const networkType = this.getNetworkType();
+    const mempoolApi = new MempoolApi(networkType);
+    const fees = await mempoolApi.getRecommendedFees();
+
+    return {
+      list: [
+        {
+          title: 'Economy',
+          desc: 'Abount 1 hour',
+          feeRate: fees.hourFee
+        },
+        {
+          title: 'Normal',
+          desc: 'About 30 minutes',
+          feeRate: fees.halfHourFee
+        },
+        {
+          title: 'Fastest',
+          desc: 'About 10 minutes',
+          feeRate: fees.fastestFee
+        }
+      ]
+    };
   };
 
   inscribeBRC20Transfer = (address: string, tick: string, amount: string, feeRate: number, outputValue: number) => {
@@ -1374,6 +1491,28 @@ export class WalletController extends BaseController {
 
   decodePsbt = (psbtHex: string, website: string) => {
     return openapiService.decodePsbt(psbtHex, website);
+  };
+
+  getN20List = async (account: AccountWithNoteInfo): Promise<N20Balance[]> => {
+    const [tokenList, deprecatedTokenList] = await Promise.all([
+      await this.noteapi.tokenList(account.noteInfo.scriptHash),
+      (async () => {
+        if (account.noteInfo.deprecated) {
+          return await this.noteapi.tokenList(account.noteInfo.deprecated.scriptHash);
+        }
+        return [];
+      })()
+    ]);
+
+    const balances = concat(tokenList, deprecatedTokenList).map((t) => ({
+      tick: t.tick,
+      decimals: t.dec,
+      confirmed: t.confirmed,
+      unconfirmed: t.unconfirmed,
+      needUpgrade: t.needUpgrade
+    }));
+
+    return balances;
   };
 
   getBRC20List = async (address: string, currentPage: number, pageSize: number) => {
@@ -1699,7 +1838,7 @@ export class WalletController extends BaseController {
   }
 
   getShowSafeNotice = () => {
-    return preferenceService.getShowSafeNotice();
+    return false;
   };
 
   setShowSafeNotice = (show: boolean) => {

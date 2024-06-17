@@ -70,7 +70,16 @@ export function useBlockstreamUrl() {
   if (networkType === NetworkType.MAINNET) {
     return 'https://mempool.space';
   } else {
-    return 'https://mempool.space/testnet';
+    return 'https://mempool.space/testnet4';
+  }
+}
+
+export function useNOTEExplorerUrl() {
+  const networkType = useNetworkType();
+  if (networkType === NetworkType.MAINNET) {
+    return 'https://explorer.noteprotocol.org';
+  } else {
+    return 'https://testnet4.noteprotocol.org';
   }
 }
 

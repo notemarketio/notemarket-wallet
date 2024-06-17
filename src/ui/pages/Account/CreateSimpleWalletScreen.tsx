@@ -2,12 +2,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ADDRESS_TYPES } from '@/shared/constant';
 import { AddressType } from '@/shared/types';
+import { toUnitInteger } from '@/shared/utils';
 import { Button, Column, Content, Header, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { AddressTypeCard } from '@/ui/components/AddressTypeCard';
 import { FooterButtonContainer } from '@/ui/components/FooterButtonContainer';
 import { TabBar } from '@/ui/components/TabBar';
-import { satoshisToAmount, useWallet } from '@/ui/utils';
+import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
 
@@ -129,15 +130,16 @@ function Step2({
       addresses.push(address);
     }
 
-    const balances = await wallet.getMultiAddressAssets(addresses.join(','));
+    const balances = await wallet.batchGetAddressBalances(addresses);
     for (let i = 0; i < addresses.length; i++) {
       const address = addresses[i];
       const balance = balances[i];
-      const satoshis = balance.totalSatoshis;
+      const total_btc = balance.btc_amount;
+      const satoshis = Number(toUnitInteger(total_btc, 8));
       self.addressBalances[address] = {
-        total_btc: satoshisToAmount(balance.totalSatoshis),
+        total_btc,
         satoshis,
-        total_inscription: balance.inscriptionCount
+        total_inscription: 0
       };
       if (satoshis > self.maxSatoshis) {
         self.maxSatoshis = satoshis;

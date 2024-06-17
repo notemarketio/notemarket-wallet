@@ -5,10 +5,10 @@ import { EventEmitter } from 'events';
 import log from 'loglevel';
 
 import { ADDRESS_TYPES, KEYRING_TYPE } from '@/shared/constant';
+import { keyring } from '@/shared/lib/walletsdk';
+import { bitcoin } from '@/shared/lib/walletsdk/bitcoin-core';
 import { AddressType } from '@/shared/types';
 import { ObservableStore } from '@metamask/obs-store';
-import { keyring } from '@unisat/wallet-sdk';
-import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
 
 import i18n from '../i18n';
 import preference from '../preference';

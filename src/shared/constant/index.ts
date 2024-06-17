@@ -35,13 +35,13 @@ export const KEYRING_TYPE_TEXT = {
   [KEYRING_TYPE.HdKeyring]: 'Created by Mnemonic',
   [KEYRING_TYPE.SimpleKeyring]: 'Imported by Private Key',
   [KEYRING_TYPE.WatchAddressKeyring]: 'Watch Mode',
-  [KEYRING_TYPE.KeystoneKeyring]: 'Import from Keystone',
+  [KEYRING_TYPE.KeystoneKeyring]: 'Import from Keystone'
 };
 export const BRAND_ALIAN_TYPE_TEXT = {
   [KEYRING_TYPE.HdKeyring]: 'Account',
   [KEYRING_TYPE.SimpleKeyring]: 'Private Key',
   [KEYRING_TYPE.WatchAddressKeyring]: 'Watch',
-  [KEYRING_TYPE.KeystoneKeyring]: 'Account',
+  [KEYRING_TYPE.KeystoneKeyring]: 'Account'
 };
 
 export const KEYRING_TYPES: {
@@ -120,105 +120,80 @@ export const ADDRESS_TYPES: {
   hdPath: string;
   displayIndex: number;
   isUnisatLegacy?: boolean;
-}[] =
-  [
-    {
-      value: AddressType.P2PKH,
-      label: 'P2PKH',
-      name: 'Legacy (P2PKH)',
-      hdPath: "m/44'/0'/0'/0",
-      displayIndex: 3,
-      isUnisatLegacy: false
-    },
-    {
-      value: AddressType.P2WPKH,
-      label: 'P2WPKH',
-      name: 'Native Segwit (P2WPKH)',
-      hdPath: "m/84'/0'/0'/0",
-      displayIndex: 0,
-      isUnisatLegacy: false
-    },
-    {
-      value: AddressType.P2TR,
-      label: 'P2TR',
-      name: 'Taproot (P2TR)',
-      hdPath: "m/86'/0'/0'/0",
-      displayIndex: 2,
-      isUnisatLegacy: false
-    },
-    {
-      value: AddressType.P2SH_P2WPKH,
-      label: 'P2SH-P2WPKH',
-      name: 'Nested Segwit (P2SH-P2WPKH)',
-      hdPath: "m/49'/0'/0'/0",
-      displayIndex: 1,
-      isUnisatLegacy: false
-    },
-    {
-      value: AddressType.M44_P2WPKH,
-      label: 'P2WPKH',
-      name: 'Native SegWit (P2WPKH)',
-      hdPath: "m/44'/0'/0'/0",
-      displayIndex: 4,
-      isUnisatLegacy: true
-    },
-    {
-      value: AddressType.M44_P2TR,
-      label: 'P2TR',
-      name: 'Taproot (P2TR)',
-      hdPath: "m/44'/0'/0'/0",
-      displayIndex: 5,
-      isUnisatLegacy: true
-    }
-  ];
+  isTestnetOnly?: boolean;
+}[] = [
+  {
+    value: AddressType.P2PKH,
+    label: 'P2PKH',
+    name: 'Legacy (P2PKH)',
+    hdPath: "m/44'/0'/0'/0",
+    displayIndex: 3,
+    isUnisatLegacy: true
+  },
+  {
+    value: AddressType.P2WPKH,
+    label: 'P2WPKH',
+    name: 'Native Segwit (P2WPKH)',
+    hdPath: "m/84'/0'/0'/0",
+    displayIndex: 4,
+    isUnisatLegacy: true
+  },
+  {
+    value: AddressType.P2TR,
+    label: 'P2TR',
+    name: 'Taproot (P2TR)',
+    hdPath: "m/86'/0'/0'/0",
+    displayIndex: 2,
+    isUnisatLegacy: true
+  },
+  {
+    value: AddressType.P2SH_P2WPKH,
+    label: 'P2SH-P2WPKH',
+    name: 'Nested Segwit (P2SH-P2WPKH)',
+    hdPath: "m/49'/0'/0'/0",
+    displayIndex: 1,
+    isUnisatLegacy: true
+  },
+  {
+    value: AddressType.M44_P2WPKH,
+    label: 'P2WPKH',
+    name: 'Native SegWit (P2WPKH)',
+    hdPath: "m/44'/0'/0'/0",
+    displayIndex: 0,
+    isUnisatLegacy: false
+  },
+  {
+    value: AddressType.M44_P2WPKH,
+    label: 'P2WPKH',
+    name: 'Native SegWit (P2WPKH)',
+    hdPath: "m/44'/1'/0'/0",
+    displayIndex: 1,
+    isUnisatLegacy: false,
+    isTestnetOnly: true
+  },
+  {
+    value: AddressType.M44_P2TR,
+    label: 'P2TR',
+    name: 'Taproot (P2TR)',
+    hdPath: "m/44'/0'/0'/0",
+    displayIndex: 5,
+    isUnisatLegacy: true
+  }
+];
 
 export const OW_HD_PATH = "m/86'/0'/0'";
 
 export const RESTORE_WALLETS: { value: RestoreWalletType; name: string; addressTypes: AddressType[] }[] = [
   {
-    value: RestoreWalletType.UNISAT,
-    name: 'UniSat Wallet',
-    addressTypes: [
-      AddressType.P2WPKH,
-      AddressType.P2SH_P2WPKH,
-      AddressType.P2TR,
-      AddressType.P2PKH,
-      AddressType.M44_P2WPKH,
-      AddressType.M44_P2TR
-    ]
-  },
-  {
-    value: RestoreWalletType.SPARROW,
-    name: 'Sparrow Wallet',
-    addressTypes: [AddressType.P2PKH, AddressType.P2WPKH, AddressType.P2SH_P2WPKH, AddressType.P2TR]
-  },
-  {
-    value: RestoreWalletType.XVERSE,
-    name: 'Xverse Wallet',
-    addressTypes: [AddressType.P2SH_P2WPKH, AddressType.P2TR]
-  },
-  {
-    value: RestoreWalletType.OW,
-    name: 'Ordinals Wallet',
-    addressTypes: [AddressType.P2TR]
-  },
-  {
-    value: RestoreWalletType.OTHERS,
-    name: 'Other Wallet',
-    addressTypes: [
-      AddressType.P2PKH,
-      AddressType.P2WPKH,
-      AddressType.P2SH_P2WPKH,
-      AddressType.P2TR,
-      AddressType.M44_P2WPKH,
-      AddressType.M44_P2TR
-    ]
+    value: RestoreWalletType.NOTE,
+    name: 'NOTE Wallet',
+    addressTypes: [AddressType.M44_P2WPKH]
   }
 ];
 
 export const NETWORK_TYPES = [
   { value: NetworkType.MAINNET, label: 'LIVENET', name: 'livenet', validNames: [0, 'livenet', 'mainnet'] },
-  { value: NetworkType.TESTNET, label: 'TESTNET', name: 'testnet', validNames: ['testnet'] }
+  { value: NetworkType.TESTNET, label: 'TESTNET4', name: 'testnet', validNames: ['testnet'] }
 ];
 
 export const MINIMUM_GAS_LIMIT = 21000;
@@ -281,9 +256,9 @@ export const TO_LOCALE_STRING_CONFIG = {
 export const SUPPORTED_DOMAINS = ['sats', 'unisat', 'x', 'btc'];
 export const SAFE_DOMAIN_CONFIRMATION = 3;
 
-export const GITHUB_URL = 'https://github.com/unisat-wallet/extension';
+export const GITHUB_URL = 'https://github.com/notemarketio/notemarket-wallet';
 export const DISCORD_URL = 'https://discord.com/invite/EMskB2sMz8';
-export const TWITTER_URL = 'https://twitter.com/unisat_wallet';
+export const TWITTER_URL = 'https://twitter.com/notemarketio';
 
 export const CHANNEL = process.env.channel!;
 export const VERSION = process.env.release!;

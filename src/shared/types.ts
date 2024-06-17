@@ -1,3 +1,5 @@
+import { bitcoin } from '@/shared/lib/walletsdk/bitcoin-core';
+
 import { CHAINS_ENUM } from './constant';
 
 export enum AddressType {
@@ -15,6 +17,7 @@ export enum NetworkType {
 }
 
 export enum RestoreWalletType {
+  NOTE,
   UNISAT,
   SPARROW,
   XVERSE,
@@ -36,10 +39,6 @@ export interface BitcoinBalance {
   confirm_btc_amount: string;
   pending_btc_amount: string;
   btc_amount: string;
-  confirm_inscription_amount: string;
-  pending_inscription_amount: string;
-  inscription_amount: string;
-  usd_value: string;
 }
 
 export interface AddressAssets {
@@ -232,6 +231,30 @@ export interface Account {
   flag: number;
 }
 
+export interface AccountWithNoteInfo extends Account {
+  noteInfo: {
+    address: string;
+    script: string;
+    scriptHash: string;
+
+    deprecated?: {
+      address: string;
+      script: string;
+      scriptHash: string;
+    };
+  };
+}
+
+export interface P2TRNoteInfo {
+  address: string;
+  script: string;
+  scriptHash: string;
+  noteP2TR: bitcoin.payments.Payment;
+  noteRedeem: bitcoin.payments.Payment;
+  p2pkP2TR: bitcoin.payments.Payment;
+  p2pkRedeem: bitcoin.payments.Payment;
+}
+
 export interface InscribeOrder {
   orderId: string;
   payAddress: string;
@@ -249,6 +272,14 @@ export interface TokenBalance {
   transferableBalance: string;
   availableBalanceSafe: string;
   availableBalanceUnSafe: string;
+}
+
+export interface N20Balance {
+  tick: string;
+  decimals: number;
+  confirmed: string;
+  unconfirmed: string;
+  needUpgrade?: boolean;
 }
 
 export interface Arc20Balance {
@@ -430,3 +461,16 @@ export interface AddressRunesTokenSummary {
   runeBalance: RuneBalance;
   runeLogo?: Inscription;
 }
+
+export type NOTEAddressType =
+  | 'P2PKH'
+  | 'P2PK-NOTE'
+  | 'P2SH'
+  | 'P2SH-NOTE'
+  | 'P2WPKH'
+  | 'P2WSH'
+  | 'P2WSH-NOTE'
+  | 'P2TR'
+  | 'P2TR-NOTE-V1'
+  | 'P2TR-NOTE'
+  | 'P2TR-COMMIT-NOTE';

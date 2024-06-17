@@ -1,6 +1,6 @@
+import { UnspentOutput } from '@/shared/lib/walletsdk';
 import { Inscription } from '@/shared/types';
 import { createSlice } from '@reduxjs/toolkit';
-import { UnspentOutput } from '@unisat/wallet-sdk';
 
 import { updateVersion } from '../global/actions';
 

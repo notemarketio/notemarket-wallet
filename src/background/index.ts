@@ -7,6 +7,7 @@ import { providerController, walletController } from './controller';
 import {
   contactBookService,
   keyringService,
+  noteApiService,
   openapiService,
   permissionService,
   preferenceService,
@@ -26,6 +27,8 @@ async function restoreAppState() {
   await preferenceService.init();
 
   await openapiService.init();
+
+  await noteApiService.init();
 
   await permissionService.init();
 

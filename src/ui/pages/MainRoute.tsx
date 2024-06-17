@@ -50,7 +50,6 @@ import NetworkTypeScreen from './Settings/NetworkTypeScreen';
 import UpgradeNoticeScreen from './Settings/UpgradeNoticeScreen';
 import TestScreen from './Test/TestScreen';
 import HistoryScreen from './Wallet/HistoryScreen';
-import KeystoneSignScreen from './Wallet/KeystoneSignScreen';
 import ReceiveScreen from './Wallet/ReceiveScreen';
 import TxConfirmScreen from './Wallet/TxConfirmScreen';
 import TxCreateScreen from './Wallet/TxCreateScreen';
@@ -276,19 +275,19 @@ const Main = () => {
 
   const selfRef = useRef({
     settingsLoaded: false,
-    summaryLoaded: false,
+    summaryLoaded: true,
     accountLoaded: false,
-    configLoaded: false
+    configLoaded: true
   });
   const self = selfRef.current;
   const init = useCallback(async () => {
     try {
       if (!self.accountLoaded) {
-        const currentAccount = await wallet.getCurrentAccount();
+        const currentAccount = await wallet.getCurrentNoteAccount();
         if (currentAccount) {
           dispatch(accountActions.setCurrent(currentAccount));
 
-          const accounts = await wallet.getAccounts();
+          const accounts = await wallet.getNoteAccounts();
           dispatch(accountActions.setAccounts(accounts));
 
           if (accounts.length > 0) {

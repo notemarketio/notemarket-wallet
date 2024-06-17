@@ -160,7 +160,7 @@ function AmountInput(props: InputProps) {
             if (onMaxClick) onMaxClick();
           }}
           text={'Max'}
-          color={'yellow'}
+          color={'gold'}
           size="sm"
         />
       ) : null}
@@ -316,7 +316,7 @@ export const AddressInput = (props: InputProps) => {
             color="yellow"
             text={'More details'}
             onClick={() => {
-              window.open(`https://docs.unisat.io/unisat-wallet/name-recognized-and-resolved`);
+              window.open('https://docs.unisat.io/unisat-wallet/name-recognized-and-resolved');
             }}
           />
           <Text preset="sub" size="sm" text={')'} />

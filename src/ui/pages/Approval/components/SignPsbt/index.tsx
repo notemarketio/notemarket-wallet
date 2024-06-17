@@ -672,13 +672,16 @@ export default function SignPsbt({
           <Column>
             <Text text="Phishing Detection" preset="title-bold" textCenter mt="xxl" />
             <Text text="Malicious behavior and suspicious activity have been detected." mt="md" />
-            <Text text="Your access to this page has been restricted by UniSat Wallet as it might be unsafe." mt="md" />
+            <Text
+              text="Your access to this page has been restricted by NOTE Market Wallet as it might be unsafe."
+              mt="md"
+            />
           </Column>
         </Content>
 
         <Footer>
           <Row full>
-            <Button text="Reject (blocked by UniSat Wallet)" preset="danger" onClick={handleCancel} full />
+            <Button text="Reject (blocked by NOTE Market Wallet)" preset="danger" onClick={handleCancel} full />
           </Row>
         </Footer>
       </Layout>
@@ -778,8 +781,9 @@ export default function SignPsbt({
                                 <Row>
                                   <AddressText address={v.address} color={isToSign ? 'white' : 'textDim'} />
                                   {isToSign && (
-                                    <Row style={{ borderWidth: 1, borderColor: 'gold', borderRadius: 5, padding: 2 }}>
-                                      <Text text="to sign" color="gold" size="xs" />
+                                    <Row
+                                      style={{ borderWidth: 1, borderColor: '#5DACBD', borderRadius: 5, padding: 2 }}>
+                                      <Text text="to sign" color="gold" size="xxs" />
                                     </Row>
                                   )}
                                 </Row>

@@ -362,19 +362,19 @@ export class UnisatProvider extends EventEmitter {
 
 declare global {
   interface Window {
-    unisat: UnisatProvider;
+    NOTEMarketWallet: UnisatProvider;
   }
 }
 
 const provider = new UnisatProvider();
 
-if (!window.unisat) {
-  window.unisat = new Proxy(provider, {
+if (!window.NOTEMarketWallet) {
+  window.NOTEMarketWallet = new Proxy(provider, {
     deleteProperty: () => true
   });
 }
 
-Object.defineProperty(window, 'unisat', {
+Object.defineProperty(window, 'NOTEMarketWallet', {
   value: new Proxy(provider, {
     deleteProperty: () => true
   }),

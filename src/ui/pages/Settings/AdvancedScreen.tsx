@@ -64,7 +64,9 @@ export default function AdvancedScreen() {
                 <Text
                   preset="sub"
                   size="sm"
-                  text={`To protect your assets, only confirmed balances are spendable when holding Runes (or ARC-20) assets. This is to prevent accidental asset burning.`}
+                  text={
+                    'To protect your assets, only confirmed balances are spendable when holding Runes (or ARC-20) assets. This is to prevent accidental asset burning.'
+                  }
                 />
               </Row>
               <Row style={{ borderTopWidth: 1, borderColor: colors.border }} my="md" />
@@ -72,9 +74,9 @@ export default function AdvancedScreen() {
               <Row justifyBetween>
                 <Column fullX gap="zero">
                   {enableUnconfirmed ? (
-                    <Text text={`Mandatory use of unconfirmed balance `} size="xs" />
+                    <Text text={'Mandatory use of unconfirmed balance '} size="xs" />
                   ) : (
-                    <Text text={`Mandatory use of unconfirmed balance`} size="xs" />
+                    <Text text={'Mandatory use of unconfirmed balance'} size="xs" />
                   )}
                   <Text
                     text={`Only applies to current address (${shortAddress(currentAccount.address)})`}
@@ -110,7 +112,9 @@ export default function AdvancedScreen() {
                 <Text
                   preset="sub"
                   size="sm"
-                  text={`If you enable this setting, you might get signature requests that aren't readable. By signing a message you don't understand, you could be agreeing to give away your funds and NFTs.You're at risk for phishing attacks. Protect yourself by turning off signData.`}
+                  text={
+                    "If you enable this setting, you might get signature requests that aren't readable. By signing a message you don't understand, you could be agreeing to give away your funds and NFTs.You're at risk for phishing attacks. Protect yourself by turning off signData."
+                  }
                 />
               </Row>
 

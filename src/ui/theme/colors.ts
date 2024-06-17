@@ -3,7 +3,6 @@
 const palette = {
   white: '#ffffff',
   white_muted: 'rgba(255, 255, 255, 0.5)',
-  black: '#000000',
   black_muted: 'rgba(0, 0, 0, 0.5)',
   black_muted2: 'rgba(0, 0, 0, 0.)',
 
@@ -11,7 +10,8 @@ const palette = {
   grey: '#495361',
   light: '#A2A4AA',
 
-  black_dark: '#2a2626',
+  black: '#1f2937',
+  black_dark: '#111827',
 
   green_dark2: '#2D7E24',
   green_dark: '#379a29',
@@ -34,7 +34,13 @@ const palette = {
   orange: '#FF7B21',
   orange_light: '#ff8f42',
 
-  gold: '#eac249'
+  gold: '#5DACBD',
+  primary: '#24527A',
+  primary_dark: '#204a6e',
+
+  success: '#064e3b',
+  error: '#7f1d1d',
+  warning: '#78350f'
 };
 
 export const colors = Object.assign({}, palette, {
@@ -46,13 +52,10 @@ export const colors = Object.assign({}, palette, {
 
   background: '#D8E0EF',
 
-  error: '#e52937',
-
   danger: palette.red,
 
-  card: '#262222',
-  warning: palette.orange,
-  primary: palette.yellow,
+  card: '#1f2937',
+  primary: '#24527A',
 
   bg2: '#2a2a2a',
   bg3: '#434242',

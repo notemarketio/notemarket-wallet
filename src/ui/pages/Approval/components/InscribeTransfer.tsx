@@ -2,6 +2,7 @@ import { Tooltip } from 'antd';
 import BigNumber from 'bignumber.js';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { getAddressUtxoDust } from '@/shared/lib/walletsdk/transaction';
 import { InscribeOrder, RawTxInfo, TokenBalance, TokenInfo, TxType } from '@/shared/types';
 import { Button, Card, Column, Content, Footer, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
@@ -23,7 +24,6 @@ import {
 import { fontSizes } from '@/ui/theme/font';
 import { spacing } from '@/ui/theme/spacing';
 import { satoshisToAmount, useApproval, useLocationState, useWallet } from '@/ui/utils';
-import { getAddressUtxoDust } from '@unisat/wallet-sdk/lib/transaction';
 
 import { useNavigate } from '../../MainRoute';
 import SignPsbt from './SignPsbt';

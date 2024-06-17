@@ -32,13 +32,13 @@
   "Generate__a__new__address": { "message": "Generate a new address" },
   "I__already__have__a__wallet": { "message": "I already have a wallet" },
   "Create__a__password": { "message": "Create a password" },
-  "Type__your__Unisat__password": { "message": "Type your UniSat Wallet password" },
+  "Type__your__Unisat__password": { "message": "Type your Wallet password" },
   "Invalid__amount": { "message": "Invalid amount" },
   "Payment__Sent": { "message": "Payment Sent" },
   "Sending": { "message": "Sending" },
   "Euro": { "message": "Euro" },
   "Export__Private__Key": { "message": "Export Private Key" },
-  "appName": { "message": "UniSat Wallet" },
+  "appName": { "message": "NOTE Market Wallet" },
   "Payment__Faild": { "message": "Payment Faild" },
   "Change__Password": { "message": "Change Password" },
   "Private__Key": { "message": "Private Key" },
@@ -87,7 +87,7 @@
   "This__is__an__imported__account": { "message": "This is an imported account" },
   "Password_must_contain_at_least_5_characters": { "message": "Password must contain at least 5 characters" },
   "appDescription": {
-    "message": "Inscribe and store your inscriptions in the world's first Open Source Chrome wallet for Ordinals! "
+    "message": "The first open-source browser extension wallet for NOTE protocol assets on bitcoin."
   },
   "If__you__ever__change__browsers__or__move__computers": {
     "message": "If you ever change browsers or move computers"
@@ -99,7 +99,7 @@
   "Show__Private__Key": { "message": "Show Private Key" },
   "You__will__use__this__to__unlock__your__wallet": { "message": "You will use this to unlock your wallet" },
   "Imported__accounts__will__not__be__associated__with__your__originally__created__Unisat__account__Secret__Recovery__Phrase": {
-    "message": "Imported accounts will not be associated with your originally created UniSat Wallet account Secret Recovery Phrase"
+    "message": "Imported accounts will not be associated with your originally created NOTE Market Wallet account Secret Recovery Phrase"
   },
   "Login": { "message": "Login" },
   "English": { "message": "English" },

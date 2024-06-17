@@ -19,7 +19,7 @@ export default function CreateAccountScreen() {
   const handleOnClick = async () => {
     await wallet.deriveNewAccountFromMnemonic(currentKeyring, alianName || defaultName);
     tools.toastSuccess('Success');
-    const currentAccount = await wallet.getCurrentAccount();
+    const currentAccount = await wallet.getCurrentNoteAccount();
     setCurrentAccount(currentAccount);
     navigate('MainScreen');
   };

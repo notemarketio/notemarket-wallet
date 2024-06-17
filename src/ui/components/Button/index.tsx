@@ -73,11 +73,11 @@ const $baseViewStyle: CSSProperties = {
 
 const $viewPresets = {
   default: Object.assign({}, $baseViewStyle, {
-    backgroundColor: colors.black_dark
+    backgroundColor: colors.black
   }) as CSSProperties,
 
   primary: Object.assign({}, $baseViewStyle, {
-    backgroundColor: colors.yellow,
+    backgroundColor: colors.primary,
     height: '40px'
   } as CSSProperties),
 
@@ -116,10 +116,10 @@ const $viewPresets = {
 
 const $hoverViewPresets: Record<Presets, CSSProperties> = {
   default: {
-    backgroundColor: '#383535'
+    backgroundColor: colors.black_dark
   },
   primary: {
-    backgroundColor: colors.yellow_dark
+    backgroundColor: colors.primary_dark
   },
   approval: {
     backgroundColor: colors.orange_dark
@@ -151,7 +151,7 @@ const $baseTextStyle: CSSProperties = {
 
 const $textPresets: Record<Presets, CSSProperties> = {
   default: $baseTextStyle,
-  primary: Object.assign({}, $baseTextStyle, { color: colors.black }),
+  primary: Object.assign({}, $baseTextStyle, { color: colors.white }),
   approval: Object.assign({}, $baseTextStyle, { color: colors.black }),
   danger: Object.assign({}, $baseTextStyle, { color: colors.white }),
   bar: Object.assign({}, $baseTextStyle, { textAlign: 'left', fontWeight: 'bold' } as CSSProperties),

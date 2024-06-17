@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
+import { AddressType } from '@/shared/lib/walletsdk';
 import { useApproval, useWallet } from '@/ui/utils';
-import { AddressType } from '@unisat/wallet-sdk';
 
 import { AppState } from '..';
 import { useAppDispatch, useAppSelector } from '../hooks';

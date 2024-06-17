@@ -2,11 +2,11 @@
 import { permissionService, sessionService } from '@/background/service';
 import { NETWORK_TYPES, VERSION } from '@/shared/constant';
 
+import { bitcoin } from '@/shared/lib/walletsdk/bitcoin-core';
+import { verifyMessageOfBIP322Simple } from '@/shared/lib/walletsdk/message';
+import { toPsbtNetwork } from '@/shared/lib/walletsdk/network';
 import { NetworkType } from '@/shared/types';
 import { amountToSatoshis } from '@/ui/utils';
-import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
-import { verifyMessageOfBIP322Simple } from '@unisat/wallet-sdk/lib/message';
-import { toPsbtNetwork } from '@unisat/wallet-sdk/lib/network';
 import { ethErrors } from 'eth-rpc-errors';
 import BaseController from '../base';
 import wallet from '../wallet';
